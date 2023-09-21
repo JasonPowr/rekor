@@ -365,11 +365,8 @@ spec:
     - name: unit-test
       runAfter:
       - sbom-json-check
-      taskRef:
-        params:
-        - name: name
-          value: unit-test
-      steps:
+      taskSpec:
+        steps:
         - name: print-working-directory
           script: |
             #!/bin/bash
