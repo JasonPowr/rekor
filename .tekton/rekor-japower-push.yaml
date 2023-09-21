@@ -375,8 +375,7 @@ spec:
           script: |
             #!/bin/bash
             cd / && cd workspace/output
-            ls -al
-            pwd
+            GOFLAGS="" make test
     workspaces:
     - name: workspace
     - name: git-auth
