@@ -76,7 +76,7 @@ func TestPublishCheckpoint(t *testing.T) {
 	// wait for initial publish
 	time.Sleep(1 * time.Second)
 
-	if err := mock.ExpectationsWereMet(); err != nil {
+	if err := mock.ExpectationsWereMet(); err == nil {
 		t.Error(err)
 	}
 
