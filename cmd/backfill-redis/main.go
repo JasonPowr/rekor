@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
+// change to trigger ci
 /*
 	backfill-redis is a script to populate the Redis index with entries
 	from Rekor. This is sometimes necessary because Redis caching is best
