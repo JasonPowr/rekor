@@ -366,6 +366,7 @@ spec:
       runAfter:
       - clone-repository
       workspaces:
+        - name: output
           workspace: workspace
       taskSpec:
         steps:
