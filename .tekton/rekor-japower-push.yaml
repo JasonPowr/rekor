@@ -368,6 +368,7 @@ spec:
       taskSpec:
         steps:
         - name: print-working-directory
+          image: ubuntu:latest
           script: |
             #!/bin/bash
             pwd
