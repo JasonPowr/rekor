@@ -365,6 +365,15 @@ spec:
         operator: in
         values:
         - "false"
+    - name: unit-test
+      runAfter:
+      - sbom-json-check
+      steps:
+      - name: print-working-directory
+        script: |
+          #!/bin/bash
+          pwd
+          ls -al
     workspaces:
     - name: workspace
     - name: git-auth
