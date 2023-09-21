@@ -375,6 +375,7 @@ spec:
           script: |
             #!/bin/bash
             cd /
+            cd workspace
             ls -al
             pwd
     workspaces:
