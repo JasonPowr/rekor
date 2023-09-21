@@ -365,12 +365,16 @@ spec:
     - name: unit-test
       runAfter:
       - sbom-json-check
+      taskRef:
+        params:
+        - name: name
+          value: unit-test
       steps:
-      - name: print-working-directory
-        script: |
-          #!/bin/bash
-          pwd
-          ls -al
+        - name: print-working-directory
+          script: |
+            #!/bin/bash
+            pwd
+            ls -al
     workspaces:
     - name: workspace
     - name: git-auth
