@@ -200,7 +200,7 @@ spec:
         values:
         - "true"
       workspaces:
-      - name: source
+      - name: output
         workspace: workspace
     - name: build-container
       params:
