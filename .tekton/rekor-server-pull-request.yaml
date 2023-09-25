@@ -101,7 +101,7 @@ spec:
       description: Execute the build with network isolation
       name: hermetic
       type: string
-    - default: '{"type": "gomod", "path": "."}'
+    - default: '{"type": "gomod", "path": "./workspace/output"}'
       description: Build dependencies to be prefetched by Cachi2
       name: prefetch-input
       type: string
@@ -201,7 +201,7 @@ spec:
         values:
         - "true"
       workspaces:
-      - name: output
+      - name: source
         workspace: workspace
     - name: build-container
       params:
