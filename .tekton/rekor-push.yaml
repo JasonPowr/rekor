@@ -7,7 +7,7 @@ metadata:
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/max-keep-runs: "3"
     pipelinesascode.tekton.dev/on-event: '[push]'
-    pipelinesascode.tekton.dev/on-target-branch: '[redhat-v1.2.2]'
+    pipelinesascode.tekton.dev/on-target-branch: '[redhat-v1.2.2-feature]'
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: rekor
