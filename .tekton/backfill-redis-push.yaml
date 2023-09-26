@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
   annotations:
-    build.appstudio.openshift.io/repo: https://github.com/securesign/rekor?rev={{revision}}
+    build.appstudio.openshift.io/repo: https://github.com/japower/rekor?rev={{revision}}
     build.appstudio.redhat.com/commit_sha: '{{revision}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/max-keep-runs: "3"
@@ -14,7 +14,7 @@ metadata:
     appstudio.openshift.io/component: backfill-redis
     pipelines.appstudio.openshift.io/type: build
   name: backfill-redis-on-push
-  namespace: securesign-tenant
+  namespace: japower-tenant
 spec:
   params:
   - name: dockerfile
@@ -22,7 +22,7 @@ spec:
   - name: git-url
     value: '{{repo_url}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/securesign-tenant/rekor/backfill-redis:{{revision}}
+    value: quay.io/redhat-user-workloads/japower-tenant/rekor/backfill-redis:{{revision}}
   - name: path-context
     value: .
   - name: revision
@@ -92,16 +92,14 @@ spec:
       description: Skip optional checks, set false if you want to run optional checks
       name: skip-optional
       type: string
-    - default: "false"
+    - default: "true"
       description: Execute the build with network isolation
       name: hermetic
       type: string
-      value: "true"
-    - default: ""
+    - default: "gomod"
       description: Build dependencies to be prefetched by Cachi2
       name: prefetch-input
       type: string
-      value: '{"type": "gomod", "path": "."}'
     - default: "false"
       description: Java build
       name: java
