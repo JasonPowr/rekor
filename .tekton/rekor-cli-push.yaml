@@ -366,7 +366,7 @@ spec:
         - "false"
     - name: unit-test
       runAfter:
-      - clone-repository
+      - prefetch-dependencies
       workspaces:
         - name: output
           workspace: workspace
