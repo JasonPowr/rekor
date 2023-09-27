@@ -7,11 +7,10 @@ metadata:
 spec:
   workspaces:
     - name: source
-      description: "Workspace where the Go source code resides"
   steps:
     - name: run-tests
       image: registry.access.redhat.com/ubi9/go-toolset@sha256:e91cbbd0b659498d029dd43e050c8a009c403146bfba22cbebca8bcd0ee7925f
-      workingDir: $(workspaces.source-code.path)
+      workingDir: $(workspaces.source.path)
       script: |
         #!/usr/bin/env sh
         go test ./...
