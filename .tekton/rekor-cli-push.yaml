@@ -364,13 +364,13 @@ spec:
         operator: in
         values:
         - "false"
-    - name: unit-test
+    - name: run-unit-test
       runAfter:
       - prefetch-dependencies    
       taskRef:
         params:
         - name: name
-          value: unit-test
+          value: go-unit-test
         - name: bundle
           value: quay.io/japower/go-unit-test@sha256:bce197a3813dcda6a7fda570ebb34c8bdd1f59d7b75f05544612cb3d1b053712
         - name: kind
