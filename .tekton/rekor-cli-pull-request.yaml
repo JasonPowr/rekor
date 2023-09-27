@@ -377,7 +377,7 @@ spec:
         - name: revision
           value: redhat-v1.2.2
         - name: pathInRepo
-          value: rekor-unit-test.yaml
+          value: .tekton/unit-test.yaml
         resolver: git
       workspaces:
         - name: source
