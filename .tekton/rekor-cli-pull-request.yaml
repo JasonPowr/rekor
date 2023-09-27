@@ -375,20 +375,12 @@ spec:
         - name: name
           value: unit-test
         - name: bundle
-          value: registry.access.redhat.com/ubi9/go-toolset@sha256:e91cbbd0b659498d029dd43e050c8a009c403146bfba22cbebca8bcd0ee7925f
+          value: quay.io/japower/rekor-unit-test@sha256:f3626a7268d831f159b7d7b650b0b412476b7de0f02db1714ed967aa734e7636
         - name: kind
           value: task
         resolver: bundles
-      taskSpec:
-        steps:
-        - name: run-unit-tests
-          image: registry.access.redhat.com/ubi9/go-toolset@sha256:e91cbbd0b659498d029dd43e050c8a009c403146bfba22cbebca8bcd0ee7925f
-          script: |
-            #!/bin/bash
-            cd / && cd workspace/output
-            GOFLAGS="" make test
       workspaces:
-        - name: output
+        - name: source
           workspace: workspace
     workspaces:
     - name: workspace
