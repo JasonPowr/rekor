@@ -22,7 +22,8 @@ echo "installing gocovmerge"
 make gocovmerge
 docker kill $(docker ps -q) || true
 echo "starting services"
-docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d --build
+docker-compose -f docker-compose.yml -f docker-compose.test.yml build --no-cache
+docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d
 
 echo "building CLI and server"
 # set the path to the root of the repo
@@ -31,10 +32,10 @@ go test -c ./cmd/rekor-cli -o rekor-cli -cover -covermode=count -coverpkg=./...
 go test -c ./cmd/rekor-server -o rekor-server -covermode=count -coverpkg=./...
 
 count=0
-echo -n "waiting up to 120 sec for system to start"
+echo -n "waiting up to 160 sec for system to start"
 until [ $(docker-compose ps | grep -c "(healthy)") == 3 ];
 do
-    if [ $count -eq 12 ]; then
+    if [ $count -eq 16 ]; then
        echo "! timeout reached"
        exit 1
     else
@@ -64,7 +65,7 @@ fi
 echo "generating code coverage"
 docker-compose restart rekor-server
 
-if ! docker cp $(docker ps -aqf "name=rekor_rekor-server"):go/rekor-server.cov /tmp/pkg-rekor-server.cov ; then
+if ! docker cp $(docker ps -aqf "name=rekor_rekor-server"):/opt/app-root/src/rekor-server.cov /tmp/pkg-rekor-server.cov ; then
    # failed to copy code coverage report from server
    echo "Failed to retrieve server code coverage report"
    docker-compose logs --no-color > /tmp/docker-compose.log
@@ -74,3 +75,5 @@ fi
 # merging coverage reports and filtering out /pkg/generated from final report
 hack/tools/bin/gocovmerge /tmp/pkg-rekor-*.cov | grep -v "/pkg/generated/" > /tmp/pkg-rekor-merged.cov
 echo "code coverage $(go tool cover -func=/tmp/pkg-rekor-merged.cov | grep -E '^total\:' | sed -E 's/\s+/ /g')"
+
+docker-compose -f docker-compose.yml -f docker-compose.test.yml down

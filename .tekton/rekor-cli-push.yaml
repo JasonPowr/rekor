@@ -369,13 +369,13 @@ spec:
       - prefetch-dependencies    
       taskRef:
         params:
-        - name: url
-          value: https://github.com/JasonPowr/rekor.git
-        - name: revision
-          value: redhat-v1.2.2
-        - name: pathInRepo
-          value: .tekton/unit-test.yaml
-        resolver: git
+        - name: name
+          value: go-unit-test
+        - name: bundle
+          value: quay.io/japower/go-unit-test@sha256:f0cc02554b7cfdf83938b20c9b3e60a9e09cb11776fbb55e9cd3591a3c0c2351
+        - name: kind
+          value: task
+        resolver: bundles
       workspaces:
         - name: source
           workspace: workspace
