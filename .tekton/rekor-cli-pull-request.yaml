@@ -382,6 +382,21 @@ spec:
       workspaces:
         - name: source
           workspace: workspace
+    - name: run-e2e-test
+      runAfter:
+      - prefetch-dependencies    
+      taskRef:
+        params:
+        - name: name
+          value: rekor-e2e-test
+        - name: bundle
+          value: quay.io/japower/rekor-e2e-test@sha256:fd278d25baa16b5d307989a60b7426ad9ccddb863418cf7a090259228cedefc4
+        - name: kind
+          value: task
+        resolver: bundles
+      workspaces:
+        - name: source
+          workspace: workspace
     workspaces:
     - name: workspace
     - name: git-auth
