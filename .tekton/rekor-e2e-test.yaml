@@ -66,7 +66,7 @@ spec:
       ports:
         - containerPort: 8091 
 
-    - name: rekor server
+    - name: rekor-server
       image: quay.io/japower/rekor-server_test@sha256:464a27571cf1e6a0f5112b0ffda01ac2386f799746f382346928681e0b78d75c
       args: [
         "rekor-server",
