@@ -33,7 +33,7 @@ spec:
         - containerPort: 3306
       script: |
         #!/usr/bin/env sh
-        /etc/init.d/mysql start
+        sudo /etc/init.d/mysql start
         tests/rhtap-e2e-test/mysql-readiness.sh
 
     - name: redis-server
