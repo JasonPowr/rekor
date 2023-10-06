@@ -366,7 +366,7 @@ spec:
         - "false"
     - name: run-unit-test
       runAfter:
-      - prefetch-dependencies    
+      - build-container    
       taskRef:
         params:
         - name: name
@@ -381,7 +381,7 @@ spec:
           workspace: workspace
     - name: run-e2e-test
       runAfter:
-      - prefetch-dependencies    
+      - build-container    
       taskRef:
         params:
         - name: name
