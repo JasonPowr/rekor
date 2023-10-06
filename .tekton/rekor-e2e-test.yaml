@@ -20,8 +20,6 @@ spec:
   sidecars:
     - image: docker:18.05-dind
       name: server
-      securityContext:
-        privileged: true
       volumeMounts:
         - mountPath: /var/lib/docker
           name: dind-storage
