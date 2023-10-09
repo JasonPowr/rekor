@@ -48,7 +48,7 @@ spec:
         - containerPort: 8090
         - containerPort: 8091
       volumeMounts:
-      - name: source
+      - name: $(workspaces.source.volume)
         mountPath: $(workspaces.source.path)
         
     - name: trillian-log-signer
@@ -65,7 +65,7 @@ spec:
       ports:
         - containerPort: 8091
       volumeMounts:
-      - name: source
+      - name: $(workspaces.source.volume)
         mountPath: $(workspaces.source.path)
 
 
