@@ -44,6 +44,8 @@ spec:
         mountPath: $(workspaces.source.path)
       script: |
         #!/usr/bin/env sh
+        pwd
+        ls -al
         $(workspaces.source.path)/tests/rhtap-e2e-test/deploy-trillian_log_server.sh
         
     - name: trillian-log-signer
@@ -55,6 +57,8 @@ spec:
         mountPath: $(workspaces.source.path)
       script: |
         #!/usr/bin/env sh
+        pwd
+        ls -al
         $(workspaces.source.path)/tests/rhtap-e2e-test/deploy-trillian_log_signer.sh
 
     - name: rekor-server
