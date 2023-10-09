@@ -22,3 +22,4 @@ while ! mysqladmin ping -h"$HOST" -P"$PORT" -u"$USER" -p"$PASSWORD" --silent; do
 done
 
 echo "Server is ready!"
+/bin/trillian_log_server --storage_system=mysql --mysql_uri="test:zaphod@tcp(127.0.0.1:3306)/test" --rpc_endpoint=0.0.0.0:8090 --http_endpoint=0.0.0.0:8091 --alsologtostderr
