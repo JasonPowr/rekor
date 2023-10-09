@@ -31,10 +31,6 @@ spec:
           value: zaphod
       ports:
         - containerPort: 3306
-      script: |
-        #!/usr/bin/env sh
-        mysqld --skip-grant-tables --user=root
-      # tests/rhtap-e2e-test/mysql-readiness.sh
 
     - name: redis-server
       image: docker.io/redis:6.2
