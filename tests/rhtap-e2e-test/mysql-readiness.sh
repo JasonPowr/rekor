@@ -1,24 +1,13 @@
-#!/bin/bash
+#!/bin/sh
 
-# MySQL container details
-HOST="localhost"
-PORT="3306"
-USER="root"
-PASSWORD="zaphod"
+# Try to connect to the MySQL database
+mysql --host=127.0.0.1 --port=3306 --user=test --password=zaphod --database=test --execute="SELECT 1" > /dev/null 2>&1
 
-# Maximum number of attempts to ping the server
-MAX_ATTEMPTS=30
-COUNT=0
-
-# Ping the server until it's ready or the maximum number of attempts is reached
-while ! mysqladmin ping -h"$HOST" -P"$PORT" -u"$USER" -p"$PASSWORD" --silent; do
-    COUNT=$((COUNT + 1))
-    if [ $COUNT -ge $MAX_ATTEMPTS ]; then
-        echo "Server is not responding after $MAX_ATTEMPTS attempts. Exiting."
-        exit 1
-    fi
-    echo "Waiting for server to be ready..."
-    sleep 5
-done
-
-echo "Server is ready!"
+# Check the exit status of the mysql command
+if [ $? -eq 0 ]; then
+    echo "Successfully connected to MySQL."
+    exit 0
+else
+    echo "Failed to connect to MySQL."
+    exit 1
+fi
