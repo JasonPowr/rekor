@@ -42,25 +42,20 @@ spec:
       volumeMounts:
       - name: $(workspaces.source.volume)
         mountPath: $(workspaces.source.path)
-        script: |
-          #!/usr/bin/env sh
-          $(workspaces.source.path)/tests/rhtap-e2e-test/deploy-trillian_log_server.sh
+      script: |
+        #!/usr/bin/env sh
+        $(workspaces.source.path)/tests/rhtap-e2e-test/deploy-trillian_log_server.sh
         
     - name: trillian-log-signer
       image: gcr.io/projectsigstore/trillian_log_signer@sha256:fe90d523f6617974f70878918e4b31d49b2b46a86024bb2d6b01d2bbfed8edbf
-      args: [
-        "--storage_system=mysql",
-        "--mysql_uri=test:zaphod@tcp(127.0.0.1:3306)/test",
-        "--rpc_endpoint=0.0.0.0:8090",
-        "--http_endpoint=0.0.0.0:8091",
-        "--force_master",
-        "--alsologtostderr",
-      ]
       ports:
         - containerPort: 8091
       volumeMounts:
       - name: $(workspaces.source.volume)
         mountPath: $(workspaces.source.path)
+      script: |
+        #!/usr/bin/env sh
+        $(workspaces.source.path)/tests/rhtap-e2e-test/deploy-trillian_log_signer.sh
 
     - name: rekor-server
       image: quay.io/japower/rekor-server_test@sha256:464a27571cf1e6a0f5112b0ffda01ac2386f799746f382346928681e0b78d75c
