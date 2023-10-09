@@ -49,7 +49,7 @@ spec:
       workingDir: $(workspaces.source.path)
       args: [
         "--storage_system=mysql",
-        "--mysql_uri=test:zaphod@tcp(sidecar-mysql:3306)/test",
+        "--mysql_uri=test:zaphod@tcp(127.0.0.1:3306)/test",
         "--rpc_endpoint=0.0.0.0:8090",
         "--http_endpoint=0.0.0.0:8091",
         "--alsologtostderr",
@@ -63,7 +63,7 @@ spec:
       workingDir: $(workspaces.source.path)
       args: [
         "--storage_system=mysql",
-        "--mysql_uri=test:zaphod@tcp(sidecar-mysql:3306)/test",
+        "--mysql_uri=test:zaphod@tcp(127.0.0.1:3306)/test",
         "--rpc_endpoint=0.0.0.0:8090",
         "--http_endpoint=0.0.0.0:8091",
         "--force_master",
@@ -79,9 +79,9 @@ spec:
         "rekor-server",
         "-test.coverprofile=rekor-server.cov",
         "serve",
-        "--trillian_log_server.address=sidecar-trillian-log-server",
+        "--trillian_log_server.address=127.0.0.1",
         "--trillian_log_server.port=8090",
-        "--redis_server.address=sidecar-redis-server",
+        "--redis_server.address=127.0.0.1",
         "--redis_server.port=6379",
         "--rekor_server.address=0.0.0.0",
         "--rekor_server.signer=memory",
