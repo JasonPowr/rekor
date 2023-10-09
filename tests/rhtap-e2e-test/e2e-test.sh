@@ -25,20 +25,6 @@ dir=$(git rev-parse --show-toplevel)
 go test -c ./cmd/rekor-cli -o rekor-cli -cover -covermode=count -coverpkg=./...
 go test -c ./cmd/rekor-server -o rekor-server -covermode=count -coverpkg=./...
 
-count=0
-echo -n "waiting up to 160 sec for system to start"
-until curl -s http://localhost:3000 > /dev/null;
-do
-    if [ $count -eq 16 ]; then
-       echo "! timeout reached"
-       exit 1
-    else
-       echo -n "."
-       sleep 10
-       let 'count+=1'
-    fi
-done
-
 echo "running tests"
 REKORTMPDIR="$(mktemp -d -t rekor_test.XXXXXX)"
 cp $dir/rekor-cli $REKORTMPDIR/rekor-cli
