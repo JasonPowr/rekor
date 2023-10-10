@@ -54,14 +54,16 @@ spec:
         - containerPort: 8091
 
     - name: rekor-server
-      image: quay.io/japower/rekor-server_test@sha256:464a27571cf1e6a0f5112b0ffda01ac2386f799746f382346928681e0b78d75c
-      commands: ["$(workspaces.source.path)/tests/rhtap-e2e-test/deploy-rekor_server.sh"]
+      image: quay.io/japower/rekor-server_test@sha256:58406672fa9d2e090a32b10e958ee0eaf80e2876f8f30c0d3dbe77c4c9809b7f
       volumeMounts:
       - name: $(workspaces.source.volume)
         mountPath: $(workspaces.source.path)
       ports:
         - containerPort: 3000
         - containerPort: 2112
+      script: |
+        #!/usr/bin/env sh
+        $(workspaces.source.path)/tests/rhtap-e2e-test/deploy-rekor_server.sh
         
   steps:
     - name: run-e2e-test

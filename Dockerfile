@@ -40,6 +40,18 @@ COPY --from=builder /opt/app-root/src/rekor-server_debug /usr/local/bin/rekor-se
 FROM registry.access.redhat.com/ubi9/go-toolset@sha256:e91cbbd0b659498d029dd43e050c8a009c403146bfba22cbebca8bcd0ee7925f as test
 
 USER root
+
+# Install minisign
+RUN curl -LO https://github.com/aead/minisign/releases/download/v0.2.0/minisign-linux-amd64.tar.gz && \
+    tar -xzf minisign-linux-amd64.tar.gz -C /usr/local/bin/ && \
+    chmod +x /usr/local/bin/minisign && \
+    rm minisign-linux-amd64.tar.gz
+
+# Install Docker
+RUN yum install -y yum-utils && \
+    yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo && \
+    yum install -y docker-ce docker-ce-cli containerd.io
+
 RUN mkdir -p /var/run/attestations && \
     touch /var/run/attestations/attestation.json && \
     chmod 777 /var/run/attestations/attestation.json
