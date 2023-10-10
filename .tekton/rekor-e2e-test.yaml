@@ -38,8 +38,8 @@ spec:
       image: gcr.io/projectsigstore/trillian_log_server@sha256:f850a0defd089ea844822030c67ae05bc93c91168a7dd4aceb0b6648c39f696b
       commands: ["$(workspaces.source.path)/tests/rhtap-e2e-test/deploy-trillian_log_signer.sh"]
       volumeMounts:
-      - name: $(workspaces.source.volume)
-        mountPath: $(workspaces.source.path)
+        - name: $(workspaces.source.volume)
+          mountPath: $(workspaces.source.path)
       ports:
         - containerPort: 8090
         - containerPort: 8091
@@ -48,16 +48,16 @@ spec:
       image: gcr.io/projectsigstore/trillian_log_signer@sha256:fe90d523f6617974f70878918e4b31d49b2b46a86024bb2d6b01d2bbfed8edbf
       commands: ["$(workspaces.source.path)/tests/rhtap-e2e-test/deploy-trillian_log_signer.sh"]
       volumeMounts:
-      - name: $(workspaces.source.volume)
-        mountPath: $(workspaces.source.path)
+        - name: $(workspaces.source.volume)
+          mountPath: $(workspaces.source.path)
       ports:
         - containerPort: 8091
 
     - name: rekor-server
       image: quay.io/japower/rekor-server_test@sha256:58406672fa9d2e090a32b10e958ee0eaf80e2876f8f30c0d3dbe77c4c9809b7f
       volumeMounts:
-      - name: $(workspaces.source.volume)
-        mountPath: $(workspaces.source.path)
+        - name: $(workspaces.source.volume)
+          mountPath: $(workspaces.source.path)
       ports:
         - containerPort: 3000
         - containerPort: 2112
