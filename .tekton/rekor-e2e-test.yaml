@@ -54,11 +54,11 @@ spec:
       workingDir: $(workspaces.source.path)
       command: ["/bin/sh", "-c", "sleep 60 && /trillian_log_signer"]
       args: [
+        "--force_master",
         "--storage_system=mysql",
         "--mysql_uri=test:zaphod@tcp(127.0.0.1:3306)/test",
         "--rpc_endpoint=0.0.0.0:8090",
         "--http_endpoint=0.0.0.0:8091",
-        "--force_master",
         "--alsologtostderr",
       ]
       ports:
@@ -66,7 +66,7 @@ spec:
 
     - name: rekor-server
       image: quay.io/japower/rekor-server_test@sha256:9c6a9692564c7a976b9e0802c5af763f625ca14b93bd2b1456e5f662f07ef6b7
-      command: ["/bin/sh", "-c", "sleep 80"]
+      command: ["/bin/sh", "-c", "sleep 80 && /rekor-server"]
       workingDir: $(workspaces.source.path)
       args: [
         "rekor-server",
