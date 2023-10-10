@@ -1,27 +1,6 @@
 #!/bin/bash
 
-# MySQL container details
-HOST="localhost"
-PORT="3306"
-USER="root"
-PASSWORD="zaphod"
-
-# Maximum number of attempts to ping the server
-MAX_ATTEMPTS=30
-COUNT=0
-
-# Ping the server until it's ready or the maximum number of attempts is reached
-while ! nc -z "$HOST" "$PORT"; do
-    COUNT=$((COUNT + 1))
-    if [ $COUNT -ge $MAX_ATTEMPTS ]; then
-        echo "Server is not responding after $MAX_ATTEMPTS attempts. Exiting."
-        exit 1
-    fi
-    echo "Waiting for server to be ready..."
-    sleep 5
-done
-
-echo "Server is ready!"
+sleep 160
 
 echo "Deploying the rekor server!"
 rekor-server -test.coverprofile=rekor-server.cov serve --trillian_log_server.address=127.0.0.1  \

@@ -14,21 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-count=0
-echo -n "waiting up to 160 sec for system to start"
-until curl -s http://localhost:3000 > /dev/null;
-do
-    if [ $count -eq 16 ]; then
-       echo "! timeout reached"
-       exit 1
-    else
-       echo -n "."
-       sleep 10
-       let 'count+=1'
-    fi
-done
-
 set -e
 testdir=$(dirname "$0")
 
