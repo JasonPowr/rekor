@@ -55,15 +55,23 @@ spec:
 
     - name: rekor-server
       image: quay.io/japower/rekor-server_test@sha256:9c6a9692564c7a976b9e0802c5af763f625ca14b93bd2b1456e5f662f07ef6b7
-      volumeMounts:
-        - name: $(workspaces.source.volume)
-          mountPath: $(workspaces.source.path)
+      args: [
+        "rekor-server",
+        "-test.coverprofile=rekor-server.cov",
+        "serve",
+        "--trillian_log_server.address=127.0.0.1",
+        "--trillian_log_server.port=8090",
+        "--redis_server.address=127.0.0.1",
+        "--redis_server.port=6379",
+        "--rekor_server.address=0.0.0.0",
+        "--rekor_server.signer=memory",
+        "--enable_attestation_storage",
+        "--attestation_storage_bucket=file:///var/run/attestations",
+        "--max_request_body_size=32792576",
+      ]
       ports:
         - containerPort: 3000
         - containerPort: 2112
-      script: |
-        #!/usr/bin/env sh
-        $(workspaces.source.path)/tests/rhtap-e2e-test/deploy-rekor_server.sh
         
   steps:
     - name: run-e2e-test
