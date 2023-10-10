@@ -37,38 +37,28 @@ spec:
     - name: trillian-log-server
       image: gcr.io/projectsigstore/trillian_log_server@sha256:f850a0defd089ea844822030c67ae05bc93c91168a7dd4aceb0b6648c39f696b
       commands: ["$(workspaces.source.path)/tests/rhtap-e2e-test/deploy-trillian_log_signer.sh"]
-      ports:
-        - containerPort: 8090
-        - containerPort: 8091
       volumeMounts:
       - name: $(workspaces.source.volume)
         mountPath: $(workspaces.source.path)
+      ports:
+        - containerPort: 8090
+        - containerPort: 8091
         
     - name: trillian-log-signer
       image: gcr.io/projectsigstore/trillian_log_signer@sha256:fe90d523f6617974f70878918e4b31d49b2b46a86024bb2d6b01d2bbfed8edbf
       commands: ["$(workspaces.source.path)/tests/rhtap-e2e-test/deploy-trillian_log_signer.sh"]
-      ports:
-        - containerPort: 8091
       volumeMounts:
       - name: $(workspaces.source.volume)
         mountPath: $(workspaces.source.path)
+      ports:
+        - containerPort: 8091
 
     - name: rekor-server
       image: quay.io/japower/rekor-server_test@sha256:464a27571cf1e6a0f5112b0ffda01ac2386f799746f382346928681e0b78d75c
-      args: [
-        "rekor-server",
-        "-test.coverprofile=rekor-server.cov",
-        "serve",
-        "--trillian_log_server.address=127.0.0.1",
-        "--trillian_log_server.port=8090",
-        "--redis_server.address=127.0.0.1",
-        "--redis_server.port=6379",
-        "--rekor_server.address=0.0.0.0",
-        "--rekor_server.signer=memory",
-        "--enable_attestation_storage",
-        "--attestation_storage_bucket=file:///var/run/attestations",
-        "--max_request_body_size=32792576",
-      ]
+      commands: ["$(workspaces.source.path)/tests/rhtap-e2e-test/deploy-rekor_server.sh"]
+      volumeMounts:
+      - name: $(workspaces.source.volume)
+        mountPath: $(workspaces.source.path)
       ports:
         - containerPort: 3000
         - containerPort: 2112
