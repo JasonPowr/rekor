@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sleep 160
+sleep 80
 
 echo "Deploying the rekor server!"
 rekor-server -test.coverprofile=rekor-server.cov serve --trillian_log_server.address=127.0.0.1  \
