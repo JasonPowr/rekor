@@ -52,6 +52,9 @@ RUN yum install -y yum-utils && \
     yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo && \
     yum install -y docker-ce docker-ce-cli containerd.io
 
+# Install netcat
+RUN yum install -y nmap-ncat
+
 RUN mkdir -p /var/run/attestations && \
     touch /var/run/attestations/attestation.json && \
     chmod 777 /var/run/attestations/attestation.json

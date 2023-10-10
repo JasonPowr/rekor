@@ -54,7 +54,7 @@ spec:
         - containerPort: 8091
 
     - name: rekor-server
-      image: quay.io/japower/rekor-server_test@sha256:58406672fa9d2e090a32b10e958ee0eaf80e2876f8f30c0d3dbe77c4c9809b7f
+      image: quay.io/japower/rekor-server_test@sha256:9c6a9692564c7a976b9e0802c5af763f625ca14b93bd2b1456e5f662f07ef6b7
       volumeMounts:
         - name: $(workspaces.source.volume)
           mountPath: $(workspaces.source.path)
