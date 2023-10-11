@@ -68,7 +68,7 @@ spec:
         
   steps:
     - name: run-e2e-test
-      image: registry.access.redhat.com/ubi9/go-toolset@sha256:e91cbbd0b659498d029dd43e050c8a009c403146bfba22cbebca8bcd0ee7925f
+      image: quay.io/japower/rekor-server_test@sha256:9c6a9692564c7a976b9e0802c5af763f625ca14b93bd2b1456e5f662f07ef6b7
       workingDir: $(workspaces.source.path)
       script: |
         #!/usr/bin/env sh

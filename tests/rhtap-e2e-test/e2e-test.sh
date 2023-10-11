@@ -45,7 +45,7 @@ REKORTMPDIR="$(mktemp -d -t rekor_test.XXXXXX)"
 cp $dir/rekor-cli $REKORTMPDIR/rekor-cli
 touch $REKORTMPDIR.rekor.yaml
 trap "rm -rf $REKORTMPDIR" EXIT
-if ! REKORTMPDIR=$REKORTMPDIR go test  -tags=e2e $(go list ./... | grep -v ./tests) ; then
+if ! REKORTMPDIR=$REKORTMPDIR go test -count=1 -tags=e2e $(go list ./... | grep -v ./tests) ; then
    exit 1
 fi
 
