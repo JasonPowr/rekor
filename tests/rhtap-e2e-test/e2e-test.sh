@@ -17,7 +17,7 @@
 
 count=0
 echo -n "waiting up to 160 sec for system to start"
-until curl -s http://localhost:3000 > /dev/null;
+until curl -s http://localhost:3000/api/v1/log/entries > /dev/null;
 do
     if [ $count -eq 16 ]; then
        echo "! timeout reached"

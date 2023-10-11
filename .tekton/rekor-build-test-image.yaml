@@ -1,0 +1,18 @@
+# apiVersion: tekton.dev/v1beta1
+# kind: Task
+# metadata:
+#   name: build-test-image
+#   annotations:
+#     tekton.dev/title: "Build a test image for rekor-server"
+# spec:
+#   workspaces:
+#     - name: source
+#   results:
+#     - name: image-sha
+#       description: The SHA of the built image.
+#   steps:
+#     - name: build-and-push-test-image
+#       image: quay.io/buildah/stable@sha256:bc24716fdb79deac7c21e55231322eabe377f7cbdf532d93aa0279174917b77c
+#       script: |
+#         buildah build --target test -t quay.io/japower/rekor-server_test -f $(workspaces.source.path)/Dockerfile
+
