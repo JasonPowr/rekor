@@ -56,7 +56,7 @@ spec:
         - containerPort: 8091
 
     - name: rekor-server
-      image: quay.io/japower/rekor-server_test@sha256:9c6a9692564c7a976b9e0802c5af763f625ca14b93bd2b1456e5f662f07ef6b7
+      image: quay.io/japower/rekor-server_test@sha256:c70de5db88c8d58d85f77c82763fa954b05af5ec6f57eeac943a1061315dcdb1
       workingDir: $(workspaces.source.path)
       command: 
         - "/bin/sh"
@@ -68,7 +68,7 @@ spec:
         
   steps:
     - name: run-e2e-test
-      image: quay.io/japower/rekor-server_test@sha256:9c6a9692564c7a976b9e0802c5af763f625ca14b93bd2b1456e5f662f07ef6b7
+      image: quay.io/japower/rekor-server_test@sha256:c70de5db88c8d58d85f77c82763fa954b05af5ec6f57eeac943a1061315dcdb1
       workingDir: $(workspaces.source.path)
       script: |
         #!/usr/bin/env sh
