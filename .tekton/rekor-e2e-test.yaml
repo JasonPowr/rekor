@@ -53,7 +53,7 @@ spec:
         - "-c"
         - 'sleep 60 && /trillian_log_signer --force_master --storage_system=mysql --mysql_uri="test:zaphod@tcp(127.0.0.1:3306)/test" --rpc_endpoint=0.0.0.0:8090 --http_endpoint=0.0.0.0:8091 --alsologtostderr'
       ports:
-        - containerPort: 8091
+        - containerPort: 8092
 
     - name: rekor-server
       image: quay.io/japower/rekor-server_test@sha256:c70de5db88c8d58d85f77c82763fa954b05af5ec6f57eeac943a1061315dcdb1
