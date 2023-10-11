@@ -20,8 +20,6 @@ spec:
           value: test
         - name: MYSQL_PASSWORD
           value: zaphod
-      ports:
-        - containerPort: 3306
 
     - name: redis-server
       image: docker.io/redis:6.2
@@ -31,8 +29,6 @@ spec:
         "--appendonly",
         "yes"
       ]
-      ports:
-        - containerPort: 6379
 
     - name: trillian-log-server
       image: quay.io/redhat-user-workloads/rhtas-tenant/rhtas-stack-1-0-beta/trillian-logserver:build-58a79-1696502872
@@ -41,9 +37,6 @@ spec:
         - "/bin/sh"
         - "-c"
         - 'sleep 60 && /trillian_log_server --storage_system=mysql --mysql_uri="test:zaphod@tcp(127.0.0.1:3306)/test" --rpc_endpoint=0.0.0.0:8090 --http_endpoint=0.0.0.0:8091 --alsologtostderr'
-      ports:
-        - containerPort: 8090
-        - containerPort: 8091
 
     - name: trillian-log-signer
       image: quay.io/redhat-user-workloads/rhtas-tenant/rhtas-stack-1-0-beta/trillian-logsigner:build-38813-1696586021
@@ -52,8 +45,6 @@ spec:
         - "/bin/sh"
         - "-c"
         - 'sleep 60 && /trillian_log_signer --force_master --storage_system=mysql --mysql_uri="test:zaphod@tcp(127.0.0.1:3306)/test" --rpc_endpoint=0.0.0.0:8090 --http_endpoint=0.0.0.0:8091 --alsologtostderr'
-      ports:
-        - containerPort: 8092
 
     - name: rekor-server
       image: quay.io/japower/rekor-server_test@sha256:c70de5db88c8d58d85f77c82763fa954b05af5ec6f57eeac943a1061315dcdb1
@@ -62,10 +53,7 @@ spec:
         - "/bin/sh"
         - "-c"
         - "sleep 80 && rekor-server -test.coverprofile=rekor-server.cov serve --trillian_log_server.address=127.0.0.1 --trillian_log_server.port=8090 --redis_server.address=127.0.0.1 --redis_server.port=6379 --rekor_server.address=0.0.0.0 --rekor_server.signer=memory --enable_attestation_storage --attestation_storage_bucket=file:///var/run/attestations --max_request_body_size=32792576"
-      ports:
-        - containerPort: 3000
-        - containerPort: 2112
-        
+                
   steps:
     - name: run-e2e-test
       image: quay.io/japower/rekor-server_test@sha256:c70de5db88c8d58d85f77c82763fa954b05af5ec6f57eeac943a1061315dcdb1
