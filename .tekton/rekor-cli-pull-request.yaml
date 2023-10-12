@@ -113,6 +113,10 @@ spec:
       description: Image tag expiration time, time values could be something like
         1h, 2d, 3w for hours, days, and weeks, respectively.
       name: image-expires-after
+    - default: ""
+      description: Path to the test image
+      name: IMAGE_URL
+      type: string
     results:
     - description: ""
       name: IMAGE_URL
