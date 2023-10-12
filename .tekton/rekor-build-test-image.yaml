@@ -1,18 +1,30 @@
-# apiVersion: tekton.dev/v1beta1
-# kind: Task
-# metadata:
-#   name: build-test-image
-#   annotations:
-#     tekton.dev/title: "Build a test image for rekor-server"
-# spec:
-#   workspaces:
-#     - name: source
-#   results:
-#     - name: image-sha
-#       description: The SHA of the built image.
-#   steps:
-#     - name: build-and-push-test-image
-#       image: quay.io/buildah/stable@sha256:bc24716fdb79deac7c21e55231322eabe377f7cbdf532d93aa0279174917b77c
-#       script: |
-#         buildah build --target test -t quay.io/japower/rekor-server_test -f $(workspaces.source.path)/Dockerfile
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-rekor-test-image
+  annotations:
+    tekton.dev/title: "Build a test image for rekor-server"
+spec:
+  workspaces:
+    - name: source
+  results:
+    - name: IMAGE_URL
+      description: The reference of the built image.
+  steps:
+    - name: build-and-push-test-image
+      image: quay.io/buildah/stable@sha256:2d5f6965b64257578af10cc8d13c7dae016e13d9e65f31023a133aef993dd448
+      script: |
+        buildah build --target test -t quay.io/japower/rekor-server_test:latest -f $(workspaces.source.path)/Dockerfile
+        buildah push quay.io/japower/rekor-server_test:latest
+        
+    - name: get-image-sha
+      image: quay.io/skopeo/stable@sha256:387073d933c77fc3be5c2773261673859d7186e67de651a5313194a63485816e
+      script: |
+        export IMAGE_DIGEST=$(skopeo inspect docker://quay.io/japower/rekor-server_test:latest | grep -m1 '"Digest":' | awk -F'"' '{print $4}')
+        echo "quay.io/japower/rekor-server_test:$IMAGE_DIGEST" > $(results.IMAGE_URL)
 
+# This file bundles the builds for the rekor test image . 
+# If any changes are made to this file, it must be pushed to Quay using the following command:
+# 'tkn bundle push quay.io/japower/rekor-build-test-image:v1 -f .tekton/rekor-build-test-image.yaml'.
+# This will generate a new SHA for the bundle. 
+# Ensure that this new SHA is updated in the pull and push pipeline files for each component.

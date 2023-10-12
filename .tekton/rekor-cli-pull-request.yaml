@@ -382,15 +382,32 @@ spec:
       workspaces:
         - name: source
           workspace: workspace
-    - name: run-e2e-test
+    - name: build-rekor-test-image
       runAfter:
       - build-container    
       taskRef:
         params:
         - name: name
-          value: rekor-e2e-test
+          value: build-rekor-test-image
         - name: bundle
-          value: quay.io/japower/rekor-e2e-test@sha256:4b8154d08e83cdd3b3ea3911e8fd6ff192125cb606afc256fe0ada7d1424edea
+          value: quay.io/japower/rekor-build-test-image@sha256:a5401ab36607698567d667e90764d518b4a1cf1e59e78e5e9ed73e2043cc2c15
+        - name: kind
+          value: task
+        resolver: bundles
+      workspaces:
+        - name: source
+          workspace: workspace
+    - name: run-e2e-test
+      runAfter:
+      - build-rekor-test-image  
+      taskRef:
+        params:
+        - name: name
+          value: rekor-e2e-test
+        - name: IMAGE_URL
+          value: $(tasks.build-rekor-test-image.results.IMAGE_URL)
+        - name: bundle
+          value: quay.io/japower/rekor-e2e-test@sha256:e35864800d6cc54e0d1989adf061394fe6fcb5d203a52bda85b8e0877bb2dc7a
         - name: kind
           value: task
         resolver: bundles
