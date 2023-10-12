@@ -10,7 +10,8 @@ spec:
   params:
     - name: IMAGE_URL
       type: string
-      description: The image url for the test image 
+      description: The image url for the test image
+      default: ""
 
   sidecars:
     - name: mysql
