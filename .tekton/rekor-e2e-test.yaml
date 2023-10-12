@@ -47,7 +47,7 @@ spec:
         - 'sleep 60 && /trillian_log_signer --force_master --storage_system=mysql --mysql_uri="test:zaphod@tcp(127.0.0.1:3306)/test" --rpc_endpoint=0.0.0.0:8092 --http_endpoint=0.0.0.0:8093 --alsologtostderr'
 
     - name: rekor-server
-      image: quay.io/japower/rekor-server_test@sha256:c70de5db88c8d58d85f77c82763fa954b05af5ec6f57eeac943a1061315dcdb1
+      image: quay.io/japower/rekor-server_test@sha256:0aba9158e5fe568a4a3cd07d803a508a60b501607b9a60f4edc63053fb12e094
       workingDir: $(workspaces.source.path)
       command: 
         - "/bin/sh"
@@ -56,7 +56,7 @@ spec:
                 
   steps:
     - name: run-e2e-test
-      image: quay.io/japower/rekor-server_test@sha256:c70de5db88c8d58d85f77c82763fa954b05af5ec6f57eeac943a1061315dcdb1
+      image: quay.io/japower/rekor-server_test@sha256:0aba9158e5fe568a4a3cd07d803a508a60b501607b9a60f4edc63053fb12e094
       workingDir: $(workspaces.source.path)
       script: |
         #!/usr/bin/env sh

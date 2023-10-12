@@ -41,17 +41,12 @@ FROM registry.access.redhat.com/ubi9/go-toolset@sha256:e91cbbd0b659498d029dd43e0
 
 USER root
 
-# Install minisign
-RUN curl -LO https://github.com/aead/minisign/releases/download/v0.2.0/minisign-linux-amd64.tar.gz && \
-    tar -xzf minisign-linux-amd64.tar.gz -C /usr/local/bin/ && \
+# Extract the x86_64 minisign binary to /usr/local/bin/
+RUN curl -LO https://github.com/jedisct1/minisign/releases/download/0.11/minisign-0.11-linux.tar.gz && \
+    tar -xzf minisign-0.11-linux.tar.gz minisign-linux/x86_64/minisign -O > /usr/local/bin/minisign && \
     chmod +x /usr/local/bin/minisign && \
-    rm minisign-linux-amd64.tar.gz
-
-# Install Docker
-RUN yum install -y yum-utils && \
-    yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo && \
-    yum install -y docker-ce docker-ce-cli containerd.io
-
+    rm minisign-0.11-linux.tar.gz
+    
 # Create test directory
 RUN mkdir -p /var/run/attestations && \
     touch /var/run/attestations/attestation.json && \

@@ -227,7 +227,8 @@ func TestSearchNoEntriesRC1(t *testing.T) {
 }
 func TestHostnameInSTH(t *testing.T) {
 	// get ID of container
-	rekorContainerID := strings.Trim(util.Run(t, "", "docker", "ps", "-q", "-f", "name=rekor-server"), "\n")
+	// rekorContainerID := strings.Trim(util.Run(t, "", "docker", "ps", "-q", "-f", "name=rekor-server"), "\n")
+	rekorContainerID := "localhost"
 	resp, err := http.Get(fmt.Sprintf("%s/api/v1/log", rekorServer()))
 	if err != nil {
 		t.Fatal(err)
