@@ -12,12 +12,14 @@ spec:
       description: The reference of the built image.
   steps:
     - name: build-and-push-test-image
+      workingDir: $(workspaces.source.path)
       image: quay.io/buildah/stable@sha256:2d5f6965b64257578af10cc8d13c7dae016e13d9e65f31023a133aef993dd448
       script: |
         buildah build --target test -t quay.io/japower/rekor-server_test:latest -f $(workspaces.source.path)/Dockerfile
         buildah push quay.io/japower/rekor-server_test:latest
         
     - name: get-image-sha
+      workingDir: $(workspaces.source.path)
       image: quay.io/skopeo/stable@sha256:387073d933c77fc3be5c2773261673859d7186e67de651a5313194a63485816e
       script: |
         export IMAGE_DIGEST=$(skopeo inspect docker://quay.io/japower/rekor-server_test:latest | grep -m1 '"Digest":' | awk -F'"' '{print $4}')
