@@ -387,7 +387,7 @@ spec:
         - name: name
           value: rekor-e2e-test
         - name: bundle
-          value: quay.io/japower/rekor-e2e-test@sha256:814552772cf921bb8a4311e84430107d9d5b0539ea319b68039ab89133c95c08
+          value: quay.io/japower/rekor-e2e-test@sha256:f6dd151246b50c9f5622dd8810022d9380184e7595e3c4ef7645b7fe13338cf3
         - name: kind
           value: task
         resolver: bundles
