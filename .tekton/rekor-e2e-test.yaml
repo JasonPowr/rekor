@@ -61,6 +61,7 @@ spec:
       script: |
         #!/usr/bin/env sh
         git config --global --add safe.directory /workspace/source
+        uname -n
         tests/rhtap-e2e-test/e2e-test.sh
 
 # This file bundles the e2e tests for rekor. 
