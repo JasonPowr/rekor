@@ -13,10 +13,11 @@ spec:
   steps:
     - name: build-and-push-test-image
       workingDir: $(workspaces.source.path)
-      image: quay.io/buildah/stable@sha256:2d5f6965b64257578af10cc8d13c7dae016e13d9e65f31023a133aef993dd448
-      script: |
-        buildah --isolation chroot build --target test -t quay.io/japower/rekor-server_test:latest -f $(workspaces.source.path)/Dockerfile
-        buildah push quay.io/japower/rekor-server_test:latest
+      image: gcr.io/kaniko-project/executor:latest
+      args:
+        - "--dockerfile=Dockerfile"
+        - "--destination=quay.io/japower/rekor-build-test-image:v1"
+        - "--target=test"
         
     - name: get-image-sha
       workingDir: $(workspaces.source.path)

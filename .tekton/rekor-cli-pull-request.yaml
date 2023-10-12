@@ -394,7 +394,7 @@ spec:
         - name: name
           value: build-rekor-test-image
         - name: bundle
-          value: quay.io/japower/rekor-build-test-image@sha256:3fa8abfa7ad1b7348d430c0aecbbe339ffffc850b21e3636a1bcdd9f1c20ed97
+          value: quay.io/japower/rekor-build-test-image@sha256:e98acb466ff7e636acfe957d1863339dc59bf435c72e9185753c1bf7aafdb67e
         - name: kind
           value: task
         resolver: bundles
