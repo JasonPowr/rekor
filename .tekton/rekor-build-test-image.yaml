@@ -15,7 +15,7 @@ spec:
       workingDir: $(workspaces.source.path)
       image: quay.io/buildah/stable@sha256:2d5f6965b64257578af10cc8d13c7dae016e13d9e65f31023a133aef993dd448
       script: |
-        buildah build --target test -t quay.io/japower/rekor-server_test:latest -f $(workspaces.source.path)/Dockerfile
+        buildah --isolation chroot build --target test -t quay.io/japower/rekor-server_test:latest -f $(workspaces.source.path)/Dockerfile
         buildah push quay.io/japower/rekor-server_test:latest
         
     - name: get-image-sha
