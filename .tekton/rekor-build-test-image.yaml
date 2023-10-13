@@ -22,6 +22,12 @@ spec:
       volumeMounts:
         - name: kaniko-secret
           mountPath: /kaniko/.docker
+      env:
+      - name: QUAY.IO_CREDENTIALS
+        value: /secret/kaniko-secret.json
+      script: |
+        ls -al
+        pwd
        
     - name: get-image-sha
       workingDir: $(workspaces.source.path)
