@@ -15,7 +15,7 @@ spec:
       workingDir: $(workspaces.source.path)
       image: quay.io/buildah/stable:v1
       securityContext:
-        runAsUser: 1001
+        runAsUser: 0
       script: |
         buildah bud --target test --format=docker --no-cache -f Dockerfile -t quay.io/japower/rekor-server_test:latest .
         buildah push quay.io/japower/rekor-server_test:latest 
