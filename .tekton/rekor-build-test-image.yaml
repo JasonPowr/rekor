@@ -13,7 +13,8 @@ spec:
   steps:
     - name: build-and-push-test-image
       securityContext:
-        runAsUser: 1000
+        capabilities:
+          add: ["SETFCAP"]
       workingDir: $(workspaces.source.path)
       image: quay.io/buildah/stable:v1
       volumeMounts:
