@@ -15,8 +15,12 @@ spec:
       workingDir: $(workspaces.source.path)
       image: quay.io/buildah/stable:v1
       securityContext:
-        runAsUser: 0
+        runAsUser: 1001
+      volumeMounts:
+        - name: docker-config-volume
+          mountPath: $(workspaces.source.path)/.docker
       script: |
+        export DOCKER_CONFIG=$(workspaces.source.path)/.docker
         buildah bud --target test --format=docker --no-cache -f Dockerfile -t quay.io/japower/rekor-server_test:latest .
         buildah push quay.io/japower/rekor-server_test:latest 
        
@@ -26,6 +30,11 @@ spec:
       script: |
         export IMAGE_DIGEST=$(skopeo inspect docker://quay.io/japower/rekor-server_test:latest | grep -m1 '"Digest":' | awk -F'"' '{print $4}')
         echo "quay.io/japower/rekor-server_test:$IMAGE_DIGEST" > $(results.IMAGE_URL)
+
+  volumes:
+  - name: docker-config-volume
+    secret:
+      secretName: rekor-test-build-secret
 
 # This file bundles the builds for the rekor test image . 
 # If any changes are made to this file, it must be pushed to Quay using the following command:
