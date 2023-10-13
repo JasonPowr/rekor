@@ -21,10 +21,7 @@ spec:
         - "--target=test"
       volumeMounts:
         - name: kaniko-secret
-          mountPath: /secret
-      env:
-      - name: QUAY.IO_CREDENTIALS
-        value: /secret/kaniko-secret.json
+          mountPath: /kaniko/.docker
        
     - name: get-image-sha
       workingDir: $(workspaces.source.path)
