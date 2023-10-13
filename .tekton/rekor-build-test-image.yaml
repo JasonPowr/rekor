@@ -23,7 +23,7 @@ spec:
         - name: DOCKER_CONFIG
           value: $(workspaces.source.path)/.docker
       script: |
-        buildah build --target test --format=docker --no-cache -f Dockerfile -t quay.io/japower/rekor-server_test:latest .
+        buildah bud --isolation chroot --target test --format=docker --no-cache -f Dockerfile -t quay.io/japower/rekor-server_test:latest .
         buildah push quay.io/japower/rekor-server_test:latest 
        
     - name: get-image-sha
