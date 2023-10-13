@@ -12,6 +12,8 @@ spec:
       description: The reference of the built image.
   steps:
     - name: build-and-push-test-image
+      securityContext:
+        runAsUser: 1001
       workingDir: $(workspaces.source.path)
       image: quay.io/buildah/stable:v1
       volumeMounts:
