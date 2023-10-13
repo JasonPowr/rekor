@@ -20,8 +20,8 @@ spec:
       volumeMounts:
         - name: docker-config-volume
           mountPath: $(workspaces.source.path)/.docker
-        - name: varlibcontainers
-          mountPath: /home/build/.local/share/containers
+        # - name: varlibcontainers
+        #   mountPath: /home/build/.local/share/containers
       script: |
         echo "Running as USER ID `id`" 
         buildah --storage-driver=vfs bud \
@@ -40,8 +40,8 @@ spec:
   - name: docker-config-volume
     secret:
       secretName: rekor-test-build-secret
-  - name: varlibcontainers
-    emptyDir: {}
+  # - name: varlibcontainers
+  #   emptyDir: {}
 
 # This file bundles the builds for the rekor test image . 
 # If any changes are made to this file, it must be pushed to Quay using the following command:
