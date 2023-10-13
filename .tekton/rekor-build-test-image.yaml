@@ -15,13 +15,10 @@ spec:
       workingDir: $(workspaces.source.path)
       image: quay.io/buildah/stable:v1
       securityContext:
-        runAsUser: 1001
+        privileged: true
       volumeMounts:
         - name: docker-config-volume
           mountPath: $(workspaces.source.path)/.docker
-      env:
-        - name: DOCKER_CONFIG
-          value: $(workspaces.source.path)/.docker
       script: |
         buildah bud --isolation chroot --target test --format=docker --no-cache -f Dockerfile -t quay.io/japower/rekor-server_test:latest .
         buildah push quay.io/japower/rekor-server_test:latest 
