@@ -13,7 +13,7 @@ spec:
   steps:
     - name: build-and-push-test-image
       securityContext:
-        runAsUser: 1001
+        runAsUser: 1000
       workingDir: $(workspaces.source.path)
       image: quay.io/buildah/stable:v1
       volumeMounts:
