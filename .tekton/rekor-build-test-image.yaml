@@ -12,13 +12,15 @@ spec:
       description: The reference of the built image.
   steps:
     - name: build-and-push-test-image
+      securityContext:
+        runAsUser: 1000
       workingDir: $(workspaces.source.path)
       image: quay.io/buildah/stable:v1
-      securityContext:
-        privileged: true
       volumeMounts:
         - name: docker-config-volume
           mountPath: $(workspaces.source.path)/.docker
+        - name: varlibcontainers
+          mountPath: /home/build/.local/share/containers
       script: |
         buildah bud --isolation chroot --target test --format=docker --no-cache -f Dockerfile -t quay.io/japower/rekor-server_test:latest .
         buildah push quay.io/japower/rekor-server_test:latest 
@@ -34,6 +36,8 @@ spec:
   - name: docker-config-volume
     secret:
       secretName: rekor-test-build-secret
+  - name: varlibcontainers
+    emptyDir: {}
 
 # This file bundles the builds for the rekor test image . 
 # If any changes are made to this file, it must be pushed to Quay using the following command:
