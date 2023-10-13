@@ -15,16 +15,25 @@ spec:
       workingDir: $(workspaces.source.path)
       image: gcr.io/kaniko-project/executor:latest
       args:
-        - "--dockerfile=Dockerfile"
+        - "--dockerfile=$(workspaces.source.path)/Dockerfile"
+        - "--context=dir://$(workspaces.source.path)"
         - "--destination=quay.io/japower/rekor-build-test-image:v1"
         - "--target=test"
-        
+      volumeMounts:
+        - name: kaniko-secret
+          mountPath: /secret
+       
     - name: get-image-sha
       workingDir: $(workspaces.source.path)
       image: quay.io/skopeo/stable@sha256:387073d933c77fc3be5c2773261673859d7186e67de651a5313194a63485816e
       script: |
         export IMAGE_DIGEST=$(skopeo inspect docker://quay.io/japower/rekor-server_test:latest | grep -m1 '"Digest":' | awk -F'"' '{print $4}')
         echo "quay.io/japower/rekor-server_test:$IMAGE_DIGEST" > $(results.IMAGE_URL)
+
+  volumes:
+    - name: kaniko-secret
+      secret:
+        secretName: rekor-test-build-secret
 
 # This file bundles the builds for the rekor test image . 
 # If any changes are made to this file, it must be pushed to Quay using the following command:
