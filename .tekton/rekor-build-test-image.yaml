@@ -28,7 +28,7 @@ spec:
        
     - name: get-image-sha
       workingDir: $(workspaces.source.path)
-      image: quay.io/skopeo/stable@sha256:v1
+      image: quay.io/skopeo/stable:v1
       script: |
         export IMAGE_DIGEST=$(skopeo inspect docker://quay.io/japower/rekor-server_test:latest | grep -m1 '"Digest":' | awk -F'"' '{print $4}')
         echo "quay.io/japower/rekor-server_test:$IMAGE_DIGEST" > $(results.IMAGE_URL)
