@@ -13,7 +13,7 @@ spec:
   steps:
     - name: build-and-push-test-image
       workingDir: $(workspaces.source.path)
-      image: quay.io/buildah/stable:v1.17.0
+      image: quay.io/buildah/stable:v1
       script: |
         buildah bud --target test --format=docker --no-cache -f Dockerfile -t quay.io/japower/rekor-server_test:latest .
         buildah push quay.io/japower/rekor-server_test:latest 
