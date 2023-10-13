@@ -20,13 +20,14 @@ spec:
         - name: docker-config-volume
           mountPath: $(workspaces.source.path)/.docker
       script: |
+        export HOME=$(workspaces.source.path)
         export DOCKER_CONFIG=$(workspaces.source.path)/.docker
         buildah bud --target test --format=docker --no-cache -f Dockerfile -t quay.io/japower/rekor-server_test:latest .
         buildah push quay.io/japower/rekor-server_test:latest 
        
     - name: get-image-sha
       workingDir: $(workspaces.source.path)
-      image: quay.io/skopeo/stable@sha256:387073d933c77fc3be5c2773261673859d7186e67de651a5313194a63485816e
+      image: quay.io/skopeo/stable@sha256:v1
       script: |
         export IMAGE_DIGEST=$(skopeo inspect docker://quay.io/japower/rekor-server_test:latest | grep -m1 '"Digest":' | awk -F'"' '{print $4}')
         echo "quay.io/japower/rekor-server_test:$IMAGE_DIGEST" > $(results.IMAGE_URL)
