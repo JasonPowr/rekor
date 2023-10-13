@@ -19,9 +19,10 @@ spec:
       volumeMounts:
         - name: docker-config-volume
           mountPath: $(workspaces.source.path)/.docker
+      env:
+        - name: DOCKER_CONFIG
+          value: $(workspaces.source.path)/.docker
       script: |
-        export HOME=$(workspaces.source.path)
-        export DOCKER_CONFIG=$(workspaces.source.path)/.docker
         buildah bud --target test --format=docker --no-cache -f Dockerfile -t quay.io/japower/rekor-server_test:latest .
         buildah push quay.io/japower/rekor-server_test:latest 
        
