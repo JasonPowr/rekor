@@ -24,9 +24,11 @@ spec:
           mountPath: /home/build/.local/share/containers
       env:
         - name: REGISTRY_AUTH_FILE
-          value: $(workspaces.source.path)/.docker/config.json
+          value: .docker/config.json
       script: |
         echo "Running as USER ID `id`" 
+        pwd
+        ls -al
         buildah --storage-driver=vfs bud \
         --target=test --format=oci \
         --tls-verify=true --no-cache \
