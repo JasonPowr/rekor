@@ -375,22 +375,22 @@ spec:
         - name: name
           value: go-unit-test
         - name: bundle
-          value: quay.io/japower/go-unit-test@sha256:f0cc02554b7cfdf83938b20c9b3e60a9e09cb11776fbb55e9cd3591a3c0c2351
+          value: quay.io/japower/go-unit-test@sha256:f7fa58dcf9be77d6a04146c600232d98033b6c769517a71f7361267710d21ffe
         - name: kind
           value: task
         resolver: bundles
       workspaces:
         - name: source
           workspace: workspace
-    - name: build-rekor-test-image
+    - name: build-test-image
       runAfter:
       - build-container    
       taskRef:
         params:
         - name: name
-          value: build-rekor-test-image
+          value: build-test-image
         - name: bundle
-          value: quay.io/japower/rekor-build-test-image@sha256:45ca0bc26b8cb5b681be4678bff024d81e8fa2c3b1628163294b3d4c3b5d3733
+          value: quay.io/japower/rekor-build-test-image@sha256:1fe7d7069a5cce680e869ef5f947f93e43e38cba6ac3b4529664ae7d2cec545b
         - name: kind
           value: task
         resolver: bundles
@@ -400,9 +400,9 @@ spec:
     - name: run-e2e-test
       params:
       - name: TEST_IMAGE_URL
-        value: $(tasks.build-rekor-test-image.results.TEST_IMAGE_URL)
+        value: $(tasks.build-test-image.results.TEST_IMAGE_URL)
       runAfter:
-      - build-rekor-test-image  
+      - build-test-image  
       taskRef:
         params:
         - name: name

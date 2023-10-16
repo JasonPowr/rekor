@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: build-rekor-test-image
+  name: build-test-image
   annotations:
     tekton.dev/title: "Build a test image for rekor-server"
 spec:
