@@ -47,6 +47,7 @@ spec:
       script: |
         export IMAGE_DIGEST=$(skopeo inspect docker://quay.io/japower/rekor-server_test:latest | grep -m1 '"Digest":' | awk -F'"' '{print $4}')
         echo "quay.io/japower/rekor-server_test:$IMAGE_DIGEST" > $(results.TEST_IMAGE_URL.path)
+        echo $TEST_IMAGE_URL
        
   volumes:
   - name: docker-config-volume

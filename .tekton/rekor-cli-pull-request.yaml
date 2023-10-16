@@ -113,10 +113,6 @@ spec:
       description: Image tag expiration time, time values could be something like
         1h, 2d, 3w for hours, days, and weeks, respectively.
       name: image-expires-after
-    - default: ""
-      description: Path to the test image
-      name: IMAGE_URL
-      type: string
     results:
     - description: ""
       name: IMAGE_URL
@@ -394,7 +390,7 @@ spec:
         - name: name
           value: build-rekor-test-image
         - name: bundle
-          value: quay.io/japower/rekor-build-test-image@sha256:6ca18e817839e385644bb1527230e08fc3eb5983d357cba22900f41caa7abff3
+          value: quay.io/japower/rekor-build-test-image@sha256:9697305f04c2b8ecd0fdf3c7472110d5e22372f8baa73ab498355ca29391e50b
         - name: kind
           value: task
         resolver: bundles
@@ -411,7 +407,7 @@ spec:
         - name: TEST_IMAGE_URL
           value: $(tasks.build-rekor-test-image.results.TEST_IMAGE_URL)
         - name: bundle
-          value: quay.io/japower/rekor-e2e-test@sha256:5a511d24611ee4a53a55dcb4ebfa79f34977d88f37ddc42ea53f5dc76d85db11
+          value: quay.io/japower/rekor-e2e-test@sha256:bf7f9ccc76392b78cf7270ad15e064774928996dd72ea9591989b57d50d1b82f
         - name: kind
           value: task
         resolver: bundles
