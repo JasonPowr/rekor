@@ -24,7 +24,7 @@ spec:
           mountPath: /home/build/.local/share/containers
       env:
         - name: REGISTRY_AUTH_FILE
-          value: .docker/config.json
+          value: .docker/.dockercfg
       script: |
         echo "Running as USER ID `id`" 
         pwd
