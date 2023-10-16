@@ -387,7 +387,7 @@ spec:
         - name: name
           value: build-rekor-test-image
         - name: bundle
-          value: quay.io/japower/rekor-build-test-image@sha256:9697305f04c2b8ecd0fdf3c7472110d5e22372f8baa73ab498355ca29391e50b
+          value: quay.io/japower/rekor-build-test-image@sha256:01d3c6aafe090a90816c7a2ea55efa47b338da7fdba51ec2ee8869693659f040
         - name: kind
           value: task
         resolver: bundles
@@ -401,8 +401,8 @@ spec:
         params:
         - name: name
           value: rekor-e2e-test
-        - name: IMAGE_URL
-          value: $(tasks.build-rekor-test-image.results.IMAGE_URL)
+        - name: TEST_IMAGE_URL
+          value: $(tasks.build-rekor-test-image.results.TEST_IMAGE_URL)
         - name: bundle
           value: quay.io/japower/rekor-e2e-test@sha256:bf7f9ccc76392b78cf7270ad15e064774928996dd72ea9591989b57d50d1b82f
         - name: kind
