@@ -404,7 +404,7 @@ spec:
         - name: TEST_IMAGE_URL
           value: $(tasks.build-rekor-test-image.results.TEST_IMAGE_URL)
         - name: bundle
-          value: quay.io/japower/rekor-e2e-test@sha256:bf7f9ccc76392b78cf7270ad15e064774928996dd72ea9591989b57d50d1b82f
+          value: quay.io/japower/rekor-e2e-test@sha256:4fd435b95292520a15c7e3a7efa976156ea73e9e2d7e79ae9274d0f4475487af
         - name: kind
           value: task
         resolver: bundles
