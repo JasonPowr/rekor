@@ -41,7 +41,8 @@ spec:
       command: 
         - "/bin/sh"
         - "-c"
-        - 'sleep 60 && /trillian_log_server --storage_system=mysql --mysql_uri="test:zaphod@tcp(127.0.0.1:3306)/test" --rpc_endpoint=0.0.0.0:8090 --http_endpoint=0.0.0.0:8091 --alsologtostderr'
+        - 'sleep 60 && /trillian_log_server --storage_system=mysql --mysql_uri="test:zaphod@tcp(127.0.0.1:3306)/test"  \
+                        --rpc_endpoint=0.0.0.0:8090 --http_endpoint=0.0.0.0:8091 --alsologtostderr'
 
     - name: trillian-log-signer
       image: quay.io/redhat-user-workloads/rhtas-tenant/rhtas-stack-1-0-beta/trillian-logsigner:build-38813-1696586021
@@ -49,7 +50,8 @@ spec:
       command: 
         - "/bin/sh"
         - "-c"
-        - 'sleep 60 && /trillian_log_signer --force_master --storage_system=mysql --mysql_uri="test:zaphod@tcp(127.0.0.1:3306)/test" --rpc_endpoint=0.0.0.0:8092 --http_endpoint=0.0.0.0:8093 --alsologtostderr'
+        - 'sleep 60 && /trillian_log_signer --force_master --storage_system=mysql --mysql_uri="test:zaphod@tcp(127.0.0.1:3306)/test" \
+                       --rpc_endpoint=0.0.0.0:8092 --http_endpoint=0.0.0.0:8093 --alsologtostderr'
 
     - name: rekor-server
       image: $(params.TEST_IMAGE_URL)
@@ -57,7 +59,9 @@ spec:
       command: 
         - "/bin/sh"
         - "-c"
-        - "sleep 80 && rekor-server -test.coverprofile=rekor-server.cov serve --trillian_log_server.address=127.0.0.1 --trillian_log_server.port=8090 --redis_server.address=127.0.0.1 --redis_server.port=6379 --rekor_server.address=0.0.0.0 --rekor_server.signer=memory --enable_attestation_storage --attestation_storage_bucket=file:///var/run/attestations --max_request_body_size=32792576"
+        - "sleep 80 && rekor-server -test.coverprofile=rekor-server.cov serve --trillian_log_server.address=127.0.0.1 --trillian_log_server.port=8090 \
+                      --redis_server.address=127.0.0.1 --redis_server.port=6379 --rekor_server.address=0.0.0.0 --rekor_server.signer=memory --enable_attestation_storage \
+                       --attestation_storage_bucket=file:///var/run/attestations --max_request_body_size=32792576"
                 
   steps:
     - name: run-e2e-test
@@ -66,7 +70,7 @@ spec:
       script: |
         #!/usr/bin/env sh
         git config --global --add safe.directory /workspace/source
-        tests/rhtap-e2e-test/e2e-test.sh
+        ./e2e-test.sh
       resources:
         limits:
           memory: 3Gi
