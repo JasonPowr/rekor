@@ -28,7 +28,7 @@ spec:
       script: |
         echo "Running as USER ID `id`" 
         pwd
-        ls -al
+        ls -al .docker
         buildah --storage-driver=vfs bud \
         --target=test --format=oci \
         --tls-verify=true --no-cache \
