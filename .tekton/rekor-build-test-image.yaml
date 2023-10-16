@@ -26,9 +26,6 @@ spec:
         - name: REGISTRY_AUTH_FILE
           value: .docker/.dockercfg
       script: |
-        echo "Running as USER ID `id`" 
-        pwd
-        ls -al .docker
         buildah --storage-driver=vfs bud \
         --target=test --format=oci \
         --tls-verify=true --no-cache \
@@ -39,15 +36,12 @@ spec:
         quay.io/japower/rekor-server_test:latest \
         docker://quay.io/japower/rekor-server_test:latest
 
-        cat $(workspaces.source.path)/image-digest | tee /tekton/results/TEST_IMAGE_URL
-
     - name: get-image-sha
       workingDir: $(workspaces.source.path)
       image: quay.io/skopeo/stable:v1
       script: |
         export IMAGE_DIGEST=$(skopeo inspect docker://quay.io/japower/rekor-server_test:latest | grep -m1 '"Digest":' | awk -F'"' '{print $4}')
-        echo "quay.io/japower/rekor-server_test:$IMAGE_DIGEST" > $(results.TEST_IMAGE_URL.path)
-        echo $(results.TEST_IMAGE_URL.path)
+        echo -n "quay.io/japower/rekor-server_test@$IMAGE_DIGEST" > $(results.TEST_IMAGE_URL.path)
        
   volumes:
   - name: docker-config-volume
