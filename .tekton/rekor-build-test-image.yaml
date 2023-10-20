@@ -22,10 +22,13 @@ spec:
           mountPath: $(workspaces.source.path)/source/.docker
         - name: varlibcontainers
           mountPath: /home/build/.local/share/containers
-      env:
-        - name: REGISTRY_AUTH_FILE
-          value: .docker/.dockercfg
+      # env:
+      #   - name: REGISTRY_AUTH_FILE
+      #     value: .docker/.dockercfg
       script: |
+        pwd
+        ls -al 
+        ls -al .docker/
         buildah --storage-driver=vfs bud \
         --target=test --format=oci \
         --tls-verify=true --no-cache \
