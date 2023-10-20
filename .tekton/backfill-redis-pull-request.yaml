@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
   annotations:
-    build.appstudio.openshift.io/repo: https://github.com/JasonPowr/rekor?rev={{revision}}
+    build.appstudio.openshift.io/repo: https://github.com/securesign/rekor?rev={{revision}}
     build.appstudio.redhat.com/commit_sha: '{{revision}}'
     build.appstudio.redhat.com/pull_request_number: '{{pull_request_number}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
@@ -11,21 +11,21 @@ metadata:
     pipelinesascode.tekton.dev/on-target-branch: '[redhat-v1.2.2]'
   creationTimestamp: null
   labels:
-    appstudio.openshift.io/application: rekor
-    appstudio.openshift.io/component: rekor-cli
+    appstudio.openshift.io/application: rhtas-stack-1-0-beta
+    appstudio.openshift.io/component: backfill-redis
     pipelines.appstudio.openshift.io/type: build
-  name: rekor-cli-on-pull-request
-  namespace: japower-tenant
+  name: backfill-redis-on-pull-request
+  namespace: rhtas-tenant
 spec:
   params:
   - name: dockerfile
-    value: Dockerfile.cli
+    value: Dockerfile.backfill-redis
   - name: git-url
     value: '{{repo_url}}'
   - name: image-expires-after
     value: 5d
   - name: output-image
-    value: quay.io/redhat-user-workloads/japower-tenant/rekor/rekor-cli:on-pr-{{revision}}
+    value: quay.io/redhat-user-workloads/rhtas-tenant/rhtas-stack-1-0-beta/backfill-redis:on-pr-{{revision}}
   - name: path-context
     value: .
   - name: revision
@@ -373,46 +373,13 @@ spec:
         - "false"
     - name: run-unit-test
       runAfter:
-      - build-container    
+      - prefetch-dependencies    
       taskRef:
         params:
         - name: name
           value: go-unit-test
         - name: bundle
           value: quay.io/securesign/rekor-unit-test@sha256:6d97063bea9f603e455f84d8935ef00ab8a68d24d6d71a2a2d7dac03c92589b8
-        - name: kind
-          value: task
-        resolver: bundles
-      workspaces:
-        - name: source
-          workspace: workspace
-    - name: build-test-image
-      runAfter:
-      - build-container    
-      taskRef:
-        params:
-        - name: name
-          value: build-test-image
-        - name: bundle
-          value: quay.io/japower/rekor-build-test-image@sha256:1fe7d7069a5cce680e869ef5f947f93e43e38cba6ac3b4529664ae7d2cec545b
-        - name: kind
-          value: task
-        resolver: bundles
-      workspaces:
-        - name: source
-          workspace: workspace
-    - name: run-e2e-test
-      params:
-      - name: TEST_IMAGE_URL
-        value: $(tasks.build-test-image.results.TEST_IMAGE_URL)
-      runAfter:
-      - build-test-image  
-      taskRef:
-        params:
-        - name: name
-          value: rekor-e2e-test
-        - name: bundle
-          value: quay.io/japower/rekor-e2e-test@sha256:8c21de0780f9b2b0793d734f02c059bce47463c88413fb16387dfb90c79423b9
         - name: kind
           value: task
         resolver: bundles
