@@ -30,15 +30,8 @@ spec:
         ls -al
         ls -al $(workspaces.source.path)
         
-        buildah --storage-driver=vfs bud \
-        --target=test --format=oci \
-        --tls-verify=true --no-cache \
-        -f Dockerfile -t quay.io/japower/rekor-server_test:latest
-
-        buildah --storage-driver=vfs push \
-        --tls-verify=true \
-        quay.io/japower/rekor-server_test:latest \
-        docker://quay.io/japower/rekor-server_test:latest
+        buildah bud --target=test -f Dockerfile -t quay.io/japower/rekor-server_test:latest
+        buildah push quay.io/japower/rekor-server_test:latest 
 
     - name: get-image-sha
       workingDir: $(workspaces.source.path)/source
