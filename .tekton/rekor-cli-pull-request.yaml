@@ -388,13 +388,13 @@ spec:
           workspace: workspace
     - name: build-test-image
       runAfter:
-      - build-container    
+      - prefetch-dependencies    
       taskRef:
         params:
         - name: name
           value: build-test-image
         - name: bundle
-          value: quay.io/japower/rekor-build-test-image@sha256:d6054f37b185f5ede92bf81efe321d6354ea35a974b18579f4dcbc3ece796d34
+          value: quay.io/japower/rekor-build-test-image@sha256:9e5e65cf6e8c4f18afdd3cfe125bc1fb483b2e70967552e712aa21f51109fd00
         - name: kind
           value: task
         resolver: bundles
