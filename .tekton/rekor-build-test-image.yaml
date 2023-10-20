@@ -26,6 +26,9 @@ spec:
         - name: REGISTRY_AUTH_FILE
           value: .docker/.dockerconfigjson
       script: |
+        pwd
+        la -al
+        ls -al /cachi2
         buildah --storage-driver=vfs bud \
         --target=test --format=oci \
         --tls-verify=true --no-cache \
