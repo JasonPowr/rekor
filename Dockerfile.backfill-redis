@@ -16,6 +16,5 @@ LABEL summary="Provides the backfill-redis binary for a rekor server"
 
 COPY --from=build-env /opt/app-root/src/backfill-redis /usr/local/bin/backfill-redis
 WORKDIR /opt/app-root/src/home
-
 #ENTRYPOINT
 ENTRYPOINT [ "backfill-redis" ]
