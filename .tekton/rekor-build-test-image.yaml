@@ -15,7 +15,7 @@ spec:
       securityContext:
         capabilities:
           add: ["SETFCAP"]
-      workingDir: $(workspaces.source.path)
+      workingDir: $(workspaces.source.path)/source
       image: quay.io/buildah/stable:v1
       volumeMounts:
         - name: docker-config-volume
@@ -27,16 +27,18 @@ spec:
           value: .docker/.dockerconfigjson
       script: |
         pwd
-        ls -al 
-# buildah --storage-driver=vfs bud \
-# --target=test --format=oci \
-# --tls-verify=true --no-cache \
-# -f Dockerfile -t quay.io/japower/rekor-server_test:latest
+        ls -al
+        ls -al ./workspace/source
+        
+        buildah --storage-driver=vfs bud \
+        --target=test --format=oci \
+        --tls-verify=true --no-cache \
+        -f Dockerfile -t quay.io/japower/rekor-server_test:latest
 
-# buildah --storage-driver=vfs push \
-# --tls-verify=true \
-# quay.io/japower/rekor-server_test:latest \
-# docker://quay.io/japower/rekor-server_test:latest
+        buildah --storage-driver=vfs push \
+        --tls-verify=true \
+        quay.io/japower/rekor-server_test:latest \
+        docker://quay.io/japower/rekor-server_test:latest
 
     - name: get-image-sha
       workingDir: $(workspaces.source.path)/source
