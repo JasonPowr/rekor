@@ -28,7 +28,7 @@ spec:
       script: |
         pwd
         ls -al
-        ls -al ./workspace/source
+        ls -al $(workspaces.source.path)
         
         buildah --storage-driver=vfs bud \
         --target=test --format=oci \
