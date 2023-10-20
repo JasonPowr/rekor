@@ -29,7 +29,7 @@ spec:
         buildah --storage-driver=vfs bud \
         --target=test --format=oci \
         --tls-verify=true --no-cache \
-        -f /source/Dockerfile -t quay.io/japower/rekor-server_test:latest /source
+        -f source/Dockerfile -t quay.io/japower/rekor-server_test:latest source
 
         buildah --storage-driver=vfs push \
         --tls-verify=true \
