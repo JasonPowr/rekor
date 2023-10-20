@@ -385,7 +385,7 @@ spec:
           workspace: workspace
     - name: build-test-image
       runAfter:
-      - prefetch-dependencies
+      - build-container 
       taskRef:
         params:
         - name: name
