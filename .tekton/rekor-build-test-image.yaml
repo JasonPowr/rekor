@@ -6,7 +6,7 @@ metadata:
     tekton.dev/title: "Build a test image for rekor-server"
 spec:
   workspaces:
-    - name: source
+    - name: source/source
   results:
     - name: TEST_IMAGE_URL
       description: The reference of the built image.

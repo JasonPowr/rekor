@@ -6,7 +6,7 @@ metadata:
     tekton.dev/title: "Rekor e2e test"
 spec:
   workspaces:
-    - name: source
+    - name: source/source
   params:
     - name: TEST_IMAGE_URL
       type: string
@@ -65,7 +65,6 @@ spec:
       workingDir: $(workspaces.source.path)
       script: |
         #!/usr/bin/env sh
-        git config --global --add safe.directory /workspace/source
         ./e2e-test.sh
       resources:
         limits:
