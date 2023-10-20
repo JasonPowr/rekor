@@ -15,7 +15,7 @@ spec:
       securityContext:
         capabilities:
           add: ["SETFCAP"]
-      workingDir: $(workspaces.source.path)
+      workingDir: $(workspaces.source.path)/source
       image: quay.io/buildah/stable:v1
       volumeMounts:
         - name: docker-config-volume
@@ -26,19 +26,15 @@ spec:
         - name: REGISTRY_AUTH_FILE
           value: .docker/.dockerconfigjson
       script: |
-        pwd
-        ls -al
-        ls -al cachi2
         buildah --storage-driver=vfs bud \
         --target=test --format=oci \
         --tls-verify=true --no-cache \
-        -f source/Dockerfile -t quay.io/japower/rekor-server_test:latest source
+        -f Dockerfile -t quay.io/japower/rekor-server_test:latest .
 
         buildah --storage-driver=vfs push \
         --tls-verify=true \
         quay.io/japower/rekor-server_test:latest \
         docker://quay.io/japower/rekor-server_test:latest
-
     - name: get-image-sha
       workingDir: $(workspaces.source.path)/source
       image: quay.io/skopeo/stable:v1
