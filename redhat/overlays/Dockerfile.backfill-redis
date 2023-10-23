@@ -1,12 +1,12 @@
 #Build stage
-FROM registry.access.redhat.com/ubi9/go-toolset@wrong_sha AS build-env
+FROM registry.access.redhat.com/ubi9/go-toolset@wrongsha AS build-env
 USER root
 RUN git config --global --add safe.directory /opt/app-root/src
 COPY . .
 RUN make backfill-redis
 
 #Install stage
-FROM registry.access.redhat.com/ubi9/go-toolset@wrong_sha
+FROM registry.access.redhat.com/ubi9/go-toolset@wrongsha
 COPY --from=build-env /opt/app-root/src/backfill-redis /usr/local/bin/backfill-redis
 WORKDIR /opt/app-root/src/home
 
