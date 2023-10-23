@@ -58,14 +58,7 @@ jobs:
         run: |
           git fetch origin
           git checkout -B update-image-versions origin/main
-
-          pwd
-          ls -la
-          echo Current SHA:$CURRENT_SHA
-          echo Latest SHA:$LATEST_SHA
-          
-          rg -l -i "$CURRENT_SHA" .
-          rg -l "$CURRENT_SHA" | xargs sed -i "s/$CURRENT_SHA/$LATEST_SHA/g"
+          rg -l "$CURRENT_SHA" . | xargs sed -i "s/$CURRENT_SHA/$LATEST_SHA/g"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
