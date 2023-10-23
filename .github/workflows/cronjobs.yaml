@@ -48,13 +48,12 @@ jobs:
           echo "CURRENT_SHA=$CURRENT_SHA" >> $GITHUB_ENV
 
       - name: Update image version
+        working-directory: redhat/overlays
         if: ${{ env.LATEST_SHA != env.CURRENT_SHA }}
         run: |
-          git fetch origin
-          git checkout -B update-image-versions origin/main
-
-          cd redhat/overlays
+          cat Dockerfile
           grep -rl $CURRENT_SHA . | xargs sed -i "s/$CURRENT_SHA/$LATEST_SHA/g"
+          cat Dockerfile
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
