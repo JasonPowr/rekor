@@ -55,6 +55,8 @@ jobs:
           git checkout -B update-image-versions origin/main
           echo "CURRENT_SHA: $CURRENT_SHA"
           echo "LATEST_SHA: $LATEST_SHA"
+          ls -al
+          pwd
           grep -rl $CURRENT_SHA .
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
