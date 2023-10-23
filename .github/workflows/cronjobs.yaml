@@ -47,6 +47,21 @@ jobs:
           CURRENT_SHA=$(grep FROM Dockerfile | awk '{print $2}' | awk -F '@' '{print $2; exit}')
           echo "CURRENT_SHA=$CURRENT_SHA" >> $GITHUB_ENV
 
+      - name: Configure git
+        if: ${{ env.LATEST_SHA != env.CURRENT_SHA }}
+        run: |
+          # Configure git
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+          # Pull main
+          git pull origin main
+
+          # Checkout update branch
+          git checkout -B Update-image-version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Update image version
         working-directory: redhat/overlays
         if: ${{ env.LATEST_SHA != env.CURRENT_SHA }}
@@ -56,14 +71,6 @@ jobs:
       - name: Commit and push changes
         if: ${{ env.LATEST_SHA != env.CURRENT_SHA }}
         run: |
-          # Configure git
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-
-          # Checkout update branch
-          git checkout -B Update-image-version
-
-          # Commit and push changes
           git add .
           git commit -m "Update image version"
           git push origin Update-image-version
