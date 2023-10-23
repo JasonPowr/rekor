@@ -53,6 +53,7 @@ jobs:
         run: |
           git fetch origin
           git checkout -B update-image-versions origin/main
+          grep -rl $CURRENT_SHA .
           grep -rl $CURRENT_SHA .| xargs sed -i "s/$CURRENT_SHA/$LATEST_SHA/g"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
