@@ -51,32 +51,31 @@ jobs:
         working-directory: redhat/overlays
         if: ${{ env.LATEST_SHA != env.CURRENT_SHA }}
         run: |
-          cat Dockerfile
           grep -rl $CURRENT_SHA . | xargs sed -i "s/$CURRENT_SHA/$LATEST_SHA/g"
-          cat Dockerfile
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check for existing pull request
+      - name: Commit and push changes
         if: ${{ env.LATEST_SHA != env.CURRENT_SHA }}
         run: |
-          openPRs="$(gh pr list --state open -H update-image-versions --json number | jq -r '.[].number' | wc -l)"
-          echo 'NUM_OPEN_PRS='$openPRs >> $GITHUB_ENV
+          # Configure git
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+          # Create a new branch
+          BRANCH_NAME="update-image-version-$(date +'%Y%m%d%H%M%S')"
+          git checkout -b $BRANCH_NAME
+
+          # Commit and push changes
+          git add .
+          git commit -m "Update image version"
+          git push origin $BRANCH_NAME
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Configure git
-        if: ${{ env.LATEST_SHA != env.CURRENT_SHA }}
-        run: |
-          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git config --global user.name "${GITHUB_ACTOR}"
 
       - name: Create pull request
-        if: ${{ env.NUM_OPEN_PRS == 0 && env.LATEST_SHA != env.CURRENT_SHA }}
+        if: ${{ env.LATEST_SHA != env.CURRENT_SHA }}
         run: |
-          git add .
-          git commit -m "Update Dockerfile image versions"
-          git push -f origin update-image-versions
-          gh pr create --base main --head update-image-versions --title "Update Dockerfile image versions" --body "This is an automated pr to update the image versions of the Dockerfiles"
+          gh pr create --title "Update image version" --body "This PR updates the image version to the latest SHA." --head $BRANCH_NAME --base main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
