@@ -47,18 +47,13 @@ jobs:
           CURRENT_SHA=$(grep FROM Dockerfile | awk '{print $2}' | awk -F '@' '{print $2; exit}')
           echo "CURRENT_SHA=$CURRENT_SHA" >> $GITHUB_ENV
 
-      - name: Configure git
-        if: ${{ env.LATEST_SHA != env.CURRENT_SHA }}
+      - name: Checkout new branch
         run: |
-          # Configure git
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git config --global user.name "${GITHUB_ACTOR}"
 
-          # Pull main
-          git pull origin main
-
-          # Checkout update branch
-          git checkout -B Update-image-version
+          git fetch origin
+          git checkout -B Update-image-version origin/main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -68,18 +63,21 @@ jobs:
         run: |
           grep -rl $CURRENT_SHA . | xargs sed -i "s/$CURRENT_SHA/$LATEST_SHA/g"
 
-      - name: Commit and push changes
-        if: ${{ env.LATEST_SHA != env.CURRENT_SHA }}
+      - name: Check for existing pull request
+        if: ${{ env.UPSTREAM_SHA != env.MIDSTREAM_SHA }}
         run: |
-          git add .
-          git commit -m "Update image version"
-          git push origin Update-image-version
+          cd midstream-rekor
+          openPRs="$(gh pr list --state open -H Update-image-version --json number | jq -r '.[].number' | wc -l)"
+          echo 'NUM_OPEN_PRS='$openPRs >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create pull request
-        if: ${{ env.LATEST_SHA != env.CURRENT_SHA }}
+        if: ${{ env.NUM_OPEN_PRS == 0 && env.UPSTREAM_SHA != env.MIDSTREAM_SHA }}
         run: |
-          gh pr create --title "Update image version" --body "This PR updates the image version to the latest SHA." --head Update-image-version --base main
+          git add .
+          git commit -m "Update image image version in Dockerfile"
+          git push -f origin Update-image-version
+          gh pr create --base main --head Update-image-version --title "Update image image version in Dockerfile" --body "This is an automated pr to update the image versions in the Dockerfiles"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
