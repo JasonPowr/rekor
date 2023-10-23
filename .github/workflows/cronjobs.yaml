@@ -64,16 +64,15 @@ jobs:
           grep -rl $CURRENT_SHA . | xargs sed -i "s/$CURRENT_SHA/$LATEST_SHA/g"
 
       - name: Check for existing pull request
-        if: ${{ env.UPSTREAM_SHA != env.MIDSTREAM_SHA }}
+        if: ${{ env.LATEST_SHA != env.CURRENT_SHA }}
         run: |
-          cd midstream-rekor
           openPRs="$(gh pr list --state open -H Update-image-version --json number | jq -r '.[].number' | wc -l)"
           echo 'NUM_OPEN_PRS='$openPRs >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create pull request
-        if: ${{ env.NUM_OPEN_PRS == 0 && env.UPSTREAM_SHA != env.MIDSTREAM_SHA }}
+        if: ${{ env.NUM_OPEN_PRS == 0 && env.LATEST_SHA != env.CURRENT_SHA }}
         run: |
           git add .
           git commit -m "Update image image version in Dockerfile"
