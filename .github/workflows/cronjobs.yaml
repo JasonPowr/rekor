@@ -65,6 +65,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check for existing pull request
+        working-directory: redhat/overlays
         if: ${{ env.LATEST_SHA != env.CURRENT_SHA }}
         run: |
           openPRs="$(gh pr list --state open -H update-image-versions --json number | jq -r '.[].number' | wc -l)"
@@ -73,12 +74,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure git
+        working-directory: redhat/overlays
         if: ${{ env.LATEST_SHA != env.CURRENT_SHA }}
         run: |
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git config --global user.name "${GITHUB_ACTOR}"
 
       - name: Create pull request
+        working-directory: redhat/overlays
         if: ${{ env.NUM_OPEN_PRS == 0 && env.LATEST_SHA != env.CURRENT_SHA }}
         run: |
           git add .
