@@ -35,11 +35,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get -y install skopeo
-          sudo apt-get install ripgrep
 
       - name: Retrieve LATEST_SHA
         run: |
@@ -58,7 +53,7 @@ jobs:
         run: |
           git fetch origin
           git checkout -B update-image-versions origin/main
-          rg -l $CURRENT_SHA . | xargs sed -i "s/$CURRENT_SHA/$LATEST_SHA/g"
+          grep -rl $CURRENT_SHA .| xargs sed -i "s/$CURRENT_SHA/$LATEST_SHA/g"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
