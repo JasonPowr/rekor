@@ -51,9 +51,12 @@ jobs:
         working-directory: redhat/overlays
         if: ${{ env.LATEST_SHA != env.CURRENT_SHA }}
         run: |
+          #!/bin/bash
           git fetch origin
           git checkout -B update-image-versions origin/main
-          grep -rl $CURRENT_SHA .
+          echo "CURRENT_SHA: $CURRENT_SHA"
+          echo "LATEST_SHA: $LATEST_SHA"
+          grep -rlF "$CURRENT_SHA" .
           grep -rl $CURRENT_SHA .| xargs sed -i "s/$CURRENT_SHA/$LATEST_SHA/g"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
