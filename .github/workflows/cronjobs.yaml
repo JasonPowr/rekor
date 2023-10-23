@@ -58,7 +58,7 @@ jobs:
         run: |
           git fetch origin
           git checkout -B update-image-versions origin/main
-          rg -l -i $CURRENT_SHA
+          rg -l -i "wrong_sha"
           rg -l "$CURRENT_SHA" | xargs sed -i "s/$CURRENT_SHA/$LATEST_SHA/g"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
