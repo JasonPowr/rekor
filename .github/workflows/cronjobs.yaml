@@ -51,7 +51,7 @@ jobs:
             LATEST_SHA=$(skopeo inspect --raw docker://registry.access.redhat.com/$image:latest | jq -r '.manifests[] | select(.platform.architecture == "amd64") .digest')
             CURRENT_SHA=$(grep "registry.access.redhat.com/$image@sha256:" Dockerfile*  | awk '{print $2}' | awk -F '@' '{print $2; exit}')
               if [ "$CURRENT_SHA" != "$LATEST_SHA" ]; then
-                grep -rl $CURRENT_SHA . | xargs sed -i "s#$CURRENT_SHA#$LATEST_SHA#g"
+                grep -rl "registry.access.redhat.com/$image@$CURRENT_SHA" . | xargs sed -i "s#registry.access.redhat.com/$image@$CURRENT_SHA#registry.access.redhat.com/$image@$LATEST_SHA#g"
                 git add .
                 git commit -m ":robot: Update $image image ref in Dockerfiles from ${CURRENT_SHA:7:11} to ${LATEST_SHA:7:11}"
                 echo "IMAGE_UPDATED=true" >> $GITHUB_ENV
