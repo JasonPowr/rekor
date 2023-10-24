@@ -35,21 +35,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup dependiencies
+      
+      - name: Configure git
         run: |
-          sudo apt-get update
-          sudo apt-get -y install skopeo
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git config --global user.name "${GITHUB_ACTOR}"
 
       - name: Check and update images
         working-directory: redhat/overlays
         run: |
           for image in ubi9/go-toolset ubi9/ubi-minimal; do
             LATEST_SHA=$(skopeo inspect --raw docker://registry.access.redhat.com/$image:latest | jq -r '.manifests[] | select(.platform.architecture == "amd64") .digest')
-            CURRENT_SHA=$(grep "registry.access.redhat.com/$image@sha256:" Dockerfile  | awk '{print $2}' | awk -F '@' '{print $2; exit}')
+            CURRENT_SHA=$(grep "registry.access.redhat.com/$image@sha256:" Dockerfile*  | awk '{print $2}' | awk -F '@' '{print $2; exit}')
               if [ "$CURRENT_SHA" != "$LATEST_SHA" ]; then
                 grep -rl $CURRENT_SHA . | xargs sed -i "s#$CURRENT_SHA#$LATEST_SHA#g"
 
-                git checkout -b Update-image-version
+                git checkout -B Update-image-version
                 git add .
                 git commit -m ":robot: Update $image image ref in Dockerfiles from ${CURRENT_SHA:7:11} to ${LATEST_SHA:7:11}"
 
@@ -68,8 +69,6 @@ jobs:
       - name: Create pull request
         if: env.IMAGE_UPDATED == 'true'
         run: |
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "actions@github.com"
           git push -f origin Update-image-version
           gh pr create --base main --head Update-image-version --title ":robot: Update image version in Dockerfiles" --body "This is an automated pr to update the image versions in the Dockerfiles"
         env:
