@@ -40,6 +40,7 @@ jobs:
         run: |
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git config --global user.name "${GITHUB_ACTOR}"
+          git checkout -B Update-image-version
 
       - name: Check and update images
         working-directory: redhat/overlays
@@ -49,11 +50,8 @@ jobs:
             CURRENT_SHA=$(grep "registry.access.redhat.com/$image@sha256:" Dockerfile*  | awk '{print $2}' | awk -F '@' '{print $2; exit}')
               if [ "$CURRENT_SHA" != "$LATEST_SHA" ]; then
                 grep -rl $CURRENT_SHA . | xargs sed -i "s#$CURRENT_SHA#$LATEST_SHA#g"
-
-                git checkout -B Update-image-version
                 git add .
                 git commit -m ":robot: Update $image image ref in Dockerfiles from ${CURRENT_SHA:7:11} to ${LATEST_SHA:7:11}"
-
                 echo "IMAGE_UPDATED=true" >> $GITHUB_ENV
               fi
           done
