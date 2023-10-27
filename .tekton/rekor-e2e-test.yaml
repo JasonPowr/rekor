@@ -3,8 +3,6 @@ apiVersion: tekton.dev/v1beta1
 metadata:
   name: rekor-e2e-test
 spec:
-  workspaces:
-  - name: workspace
   params:
     - description: 'Snapshot of the application'
       name: SNAPSHOT
@@ -14,8 +12,11 @@ spec:
       name: NAMESPACE
       default: "default"
       type: string
+  workspaces:
+  - name: cluster-credentials
+  - name: workspace
+    optional: true
   tasks:
-
     - name: parse-snapshot
       params:
         - name: SNAPSHOT
@@ -45,7 +46,6 @@ spec:
               echo -n "$REVISION"
               pwd
               ls -al workspace
-
     - name: clone-repository
       params:
       - name: url
