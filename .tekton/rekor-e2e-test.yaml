@@ -57,3 +57,8 @@ spec:
           - name: kind
             value: task
         resolver: bundles
+      workspaces:
+      - name: output
+        workspace: workspace
+      - name: basic-auth
+        workspace: git-auth
