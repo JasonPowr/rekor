@@ -12,35 +12,70 @@ spec:
       name: NAMESPACE
       default: "default"
       type: string
-  workspaces:
-  - name: cluster-credentials
-    optional: true
   tasks:
-    - name: rekor-e2e-test
-      description: Task for running the rekor e2e tests
+
+    - name: parse-snapshot
       params:
-      - name: SNAPSHOT
-        value: $(params.SNAPSHOT)
-      - name: NAMESPACE
-        value: $(params.NAMESPACE)
-      workspaces:
-        - name: cluster-credentials
-          optional: true
+        - name: SNAPSHOT
+          value: $(params.SNAPSHOT)
       taskSpec:
         params:
-        - name: SNAPSHOT
-        - name: NAMESPACE
-        workspaces:
-        - name: cluster-credentials
-          optional: true
-        steps:
-        - name: echo
-          image: registry.access.redhat.com/ubi9/go-toolset@sha256:82d9bc5d3ceb43635288880f26207201e55d1c688a60ebbfff4f54d4963a62a1
-          env:
           - name: SNAPSHOT
-            value: $(params.SNAPSHOT)
-          - name: NAMESPACE
-            value: $(params.NAMESPACE)
-          script: |
-            echo "SNAPSHOT: $SNAPSHOT"
-            echo "NAMESPACE: $NAMESPACE"
+        results:
+          - name: git-url
+            description: The extracted git URL from SNAPSHOT
+          - name: revision
+            description: The extracted revision from SNAPSHOT
+        steps:
+          - name: parse-snapshot
+            image: registry.access.redhat.com/ubi9/ubi-minimal@sha256:b40f52aa68b29634ff45429ee804afbaa61b33de29ae775568933c71610f07a4
+            env:
+            - name: SNAPSHOT
+              value: $(params.SNAPSHOT)
+            script: |
+              dnf -y install jq
+              URL=$(echo -n ${SNAPSHOT} | jq -r '.components[0].source.git.url')
+              REVISION=$(echo -n ${SNAPSHOT} | jq -r '.components[0].source.git.revision')
+              echo -n "$URL" > /tekton/results/git-url
+              echo -n "$REVISION" > /tekton/results/revision
+
+    - name: clone-repository
+      params:
+        - name: url
+          value: $(tasks.parse-snapshot.results.git-url)
+        - name: revision
+          value: $(tasks.parse-snapshot.results.revision)
+      runAfter:
+        - parse-snapshot
+      taskRef:
+        params:
+          - name: name
+            value: git-clone
+          - name: bundle
+            value: quay.io/redhat-appstudio-tekton-catalog/task-git-clone:0.1@sha256:d9e1ab10d72953e7a85dab69b8b96f5b41580a6d4026f77b6a5ba6f3ed227cc3
+          - name: kind
+            value: task
+        resolver: bundles
+      workspaces:
+        - name: output
+          workspace: workspace
+        - name: basic-auth
+          workspace: git-auth
+
+  workspaces:
+    - name: cluster-credentials
+      optional: true
+    - name: workspace
+      volumeClaimTemplate:
+        metadata:
+          creationTimestamp: null
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+        status: {}
+    - name: git-auth
+      secret:
+        secretName: '{{ git_auth_secret }}'
