@@ -33,7 +33,8 @@ spec:
             - name: SNAPSHOT
               value: $(params.SNAPSHOT)
             script: |
-              dnf -y install jq
+              curl -o /usr/local/bin/jq -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+              chmod +x /usr/local/bin/jq
               URL=$(echo -n ${SNAPSHOT} | jq -r '.components[0].source.git.url')
               REVISION=$(echo -n ${SNAPSHOT} | jq -r '.components[0].source.git.revision')
               echo -n "$URL" > /tekton/results/git-url
