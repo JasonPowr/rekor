@@ -42,4 +42,4 @@ spec:
               echo -n "$URL"
               echo -n "$REVISION"
               pwd
-              ls -al
+              ls -al workspace
