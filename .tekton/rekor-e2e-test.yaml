@@ -1,66 +1,89 @@
-kind: Pipeline
 apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
 metadata:
-  name: rekor-e2e-test
+  annotations:
+    build.appstudio.openshift.io/repo: https://github.com/JasonPowr/rekor?rev=$(params.revision)
+    build.appstudio.redhat.com/commit_sha: '$(params.revision)'
 spec:
   params:
-    - description: 'Snapshot of the application'
-      name: SNAPSHOT
-      default: '{"components": [{"name":"test-app", "containerImage": "quay.io/example/repo:latest"}]}'
-      type: string
-    - description: 'Namespace where the application is running'
-      name: NAMESPACE
-      default: "default"
-      type: string
-  workspaces:
-  - name: cluster-credentials
-    optional: true
-  - name: workspace
-  tasks:
-    - name: parse-snapshot
-      params:
-        - name: SNAPSHOT
-          value: $(params.SNAPSHOT)
-      taskSpec:
-        params:
-          - name: SNAPSHOT
-        results:
-          - name: git-url
-            description: The extracted git URL from SNAPSHOT
-          - name: revision
-            description: The extracted revision from SNAPSHOT
-        steps:
-          - name: parse-snapshot
-            image: registry.access.redhat.com/ubi9/ubi-minimal@sha256:b40f52aa68b29634ff45429ee804afbaa61b33de29ae775568933c71610f07a4
-            env:
-            - name: SNAPSHOT
-              value: $(params.SNAPSHOT)
-            script: |
-              curl -o /usr/local/bin/jq -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
-              chmod +x /usr/local/bin/jq
-              URL=$(echo -n ${SNAPSHOT} | jq -r '.components[0].source.git.url')
-              REVISION=$(echo -n ${SNAPSHOT} | jq -r '.components[0].source.git.revision')
-              echo -n "$URL" > /tekton/results/git-url
-              echo -n "$REVISION" > /tekton/results/revision
-              echo -n "$URL"
-              echo -n "$REVISION"
-              pwd
-              ls -al workspace
-    - name: clone-repository
-      params:
-      - name: url
-        value: $(tasks.parse-snapshot.results.git-url)
-      - name: revision
-        value: $(tasks.parse-snapshot.results.revision)
-      taskRef:
-        params:
-        - name: name
-          value: git-clone
-        - name: bundle
-          value: quay.io/redhat-appstudio-tekton-catalog/task-git-clone:0.1@sha256:d9e1ab10d72953e7a85dab69b8b96f5b41580a6d4026f77b6a5ba6f3ed227cc3
-        - name: kind
-          value: task
-        resolver: bundles
-      workspaces:
-      - name: output
-        workspace: workspace
+    - name: dockerfile
+      value: Dockerfile
+    - name: git-url
+      value: '$(params.repo_url)'
+    - name: revision
+      value: '$(params.revision)'
+  pipelineSpec:
+    params:
+      - description: Source Repository URL
+        name: git-url
+        type: string
+      - default: ""
+        description: Revision of the Source Repository
+        name: revision
+        type: string
+      - default: .
+        description: Path to the source code of an application's component from where to build image.
+        name: path-context
+        type: string
+      - default: Dockerfile
+        description: Path to the Dockerfile inside the context specified by parameter path-context
+        name: dockerfile
+        type: string
+    tasks:
+      - name: test
+        taskSpec:
+          steps:
+            - name: test
+              image: registry.access.redhat.com/ubi9/ubi-minimal@sha256:b40f52aa68b29634ff45429ee804afbaa61b33de29ae775568933c71610f07a4
+              script: |
+                #!/usr/bin/env sh
+                echo "git-url: $(params.git-url)"
+                echo "revision: $(params.revision)"
+                echo "path-context: $(params.path-context)"
+                echo "dockerfile: $(params.dockerfile)"
+
+
+# kind: Pipeline
+# apiVersion: tekton.dev/v1beta1
+# metadata:
+#   name: rekor-e2e-test
+# spec:
+#   params:
+#     - description: 'Snapshot of the application'
+#       name: SNAPSHOT
+#       default: '{"components": [{"name":"test-app", "containerImage": "quay.io/example/repo:latest"}]}'
+#       type: string
+#     - description: 'Namespace where the application is running'
+#       name: NAMESPACE
+#       default: "default"
+#       type: string
+#   workspaces:
+#   - name: cluster-credentials
+#     optional: true
+#   - name: workspace
+#   tasks:
+#     - name: parse-snapshot
+#       params:
+#         - name: SNAPSHOT
+#           value: $(params.SNAPSHOT)
+#       taskSpec:
+#         params:
+#           - name: SNAPSHOT
+#         results:
+#           - name: git-url
+#             description: The extracted git URL from SNAPSHOT
+#           - name: revision
+#             description: The extracted revision from SNAPSHOT
+#         steps:
+#           - name: parse-snapshot
+#             image: registry.access.redhat.com/ubi9/ubi-minimal@sha256:b40f52aa68b29634ff45429ee804afbaa61b33de29ae775568933c71610f07a4
+#             env:
+#             - name: SNAPSHOT
+#               value: $(params.SNAPSHOT)
+#             script: |
+#               curl -o /usr/local/bin/jq -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+#               chmod +x /usr/local/bin/jq
+#               URL=$(echo -n ${SNAPSHOT} | jq -r '.components[0].source.git.url')
+#               REVISION=$(echo -n ${SNAPSHOT} | jq -r '.components[0].source.git.revision')
+#               echo -n "$URL" > /tekton/results/git-url
+#               echo -n "$REVISION" > /tekton/results/revision
