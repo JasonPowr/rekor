@@ -14,8 +14,8 @@ spec:
       type: string
   workspaces:
   - name: cluster-credentials
-  - name: workspace
     optional: true
+  - name: workspace
   tasks:
     - name: parse-snapshot
       params:
