@@ -39,7 +39,7 @@ spec:
               REVISION=$(echo -n ${SNAPSHOT} | jq -r '.components[0].source.git.revision')
               echo -n "$URL" > /tekton/results/git-url
               echo -n "$REVISION" > /tekton/results/revision
-              echo -n "$URL
+              echo -n "$URL"
               echo -n "$REVISION"
               pwd
               ls -al
