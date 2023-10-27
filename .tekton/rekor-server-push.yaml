@@ -366,21 +366,21 @@ spec:
         operator: in
         values:
         - "false"
-    - name: build-test-image
-      runAfter:
-      - prefetch-dependencies    
-      taskRef:
-        params:
-        - name: name
-          value: build-test-image
-        - name: bundle
-          value: quay.io/japower/rekor-build-test-image@sha256:11e58f792917d583bf93ea9996f50d118757e1f50176bd05e19bb8f11e649be8
-        - name: kind
-          value: task
-        resolver: bundles
-      workspaces:
-        - name: source
-          workspace: workspace
+    # - name: build-test-image
+    #   runAfter:
+    #   - prefetch-dependencies    
+    #   taskRef:
+    #     params:
+    #     - name: name
+    #       value: build-test-image
+    #     - name: bundle
+    #       value: quay.io/japower/rekor-build-test-image@sha256:11e58f792917d583bf93ea9996f50d118757e1f50176bd05e19bb8f11e649be8
+    #     - name: kind
+    #       value: task
+    #     resolver: bundles
+    #   workspaces:
+    #     - name: source
+    #       workspace: workspace
     workspaces:
     - name: workspace
     - name: git-auth
