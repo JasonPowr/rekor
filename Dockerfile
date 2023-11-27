@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM brew.registry.redhat.io/rh-osbs/openshift-golang-builder@sha256:98a0ff138c536eee98704d6909699ad5d0725a20573e2c510a60ef462b45cce0 AS build-env
+FROM brew.registry.redhat.io/rh-osbs/openshift-golang-builder@ AS build-env
 ENV APP_ROOT=/opt/app-root
 ENV GOPATH=$APP_ROOT
 
