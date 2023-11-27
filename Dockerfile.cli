@@ -1,5 +1,5 @@
 #Build stage
-FROM brew.registry.redhat.io/rh-osbs/openshift-golang-builder@sha256:98a0ff138c536eee98704d6909699ad5d0725a20573e2c510a60ef462b45cce0 AS build-env
+FROM brew.registry.redhat.io/rh-osbs/openshift-golang-builder@sha256:b848cf648a383b6e207ebd150afc7e65a90efe0d7734f4f6d2767144d58d68d0 AS build-env
 USER root
 
 RUN mkdir /opt/app-root && mkdir /opt/app-root/src
