@@ -21,13 +21,14 @@ spec:
         - name: docker-config-volume
           mountPath: $(workspaces.source.path)/.docker
         - name: brew-config-volume
-          mountPath: $(workspaces.source.path)/.docker
+          mountPath: $(workspaces.source.path)/.brew_auth
         - name: varlibcontainers
           mountPath: /home/build/.local/share/containers
       env:
         - name: REGISTRY_AUTH_FILE
           value: .docker/.dockerconfigjson
       script: |
+        buildah login --authfile .brew_auth/.dockerconfigjson brew.registry.redhat.io
         buildah --storage-driver=vfs bud \
         --target=test --format=oci \
         --tls-verify=true --no-cache \
