@@ -20,6 +20,8 @@ spec:
       volumeMounts:
         - name: docker-config-volume
           mountPath: $(workspaces.source.path)/.docker
+        - name: brew-config-volume
+          mountPath: $(workspaces.source.path)/.docker
         - name: varlibcontainers
           mountPath: /home/build/.local/share/containers
       env:
@@ -47,6 +49,9 @@ spec:
     - name: docker-config-volume
       secret:
         secretName: rekor-test-build-secret
+    - name: brew-config-volume
+      secret:
+        secretName: brew-registry-pull-secret
     - name: varlibcontainers
       emptyDir: {}
 
