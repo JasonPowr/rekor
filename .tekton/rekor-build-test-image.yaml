@@ -28,10 +28,11 @@ spec:
         - name: REGISTRY_AUTH_FILE
           value: .docker/.dockerconfigjson
       script: |
-        buildah login --authfile .brew_auth/.dockerconfigjson brew.registry.redhat.io
+        #!/usr/bin/env sh
         buildah --storage-driver=vfs bud \
         --target=test --format=oci \
         --tls-verify=true --no-cache \
+        --authfile .brew_auth/.dockerconfigjson \
         -f source/Dockerfile -t quay.io/securesign/rekor-server_test:latest source
 
         buildah --storage-driver=vfs push \
@@ -55,7 +56,6 @@ spec:
         secretName: brew-registry-pull-secret
     - name: varlibcontainers
       emptyDir: {}
-
 # This file bundles the builds for the rekor test image .
 # If any changes are made to this file, it must be pushed to Quay using the following command:
 # 'tkn bundle push quay.io/securesign/rekor-build-test-image:latest -f .tekton/rekor-build-test-image.yaml'.
